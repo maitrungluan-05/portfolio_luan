@@ -212,12 +212,12 @@ export const ServicesSection: React.FC = () => {
                   {/* Action CTA */}
                   <div className="mt-8 pt-5 border-t border-white/8">
                     <a
-                      href={service.ctaUrl || 'https://t.me/trungluanmmo'}
+                      href={service.ctaUrl || 'https://zalo.me/0974496371'}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-white hover:bg-zinc-100 text-black font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-md group/btn hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(0,210,255,0.3)]"
                     >
-                      <span>{service.ctaText || 'Tư vấn ngay'}</span>
+                      <span>{service.ctaText || 'Chat Zalo Tư Vấn'}</span>
                       <ArrowUpRight
                         size={15}
                         className="transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"

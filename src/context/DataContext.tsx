@@ -307,8 +307,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           title: service.title || 'Dịch vụ mới',
           tagline: service.tagline || '',
           features: service.features || [],
-          ctaUrl: service.ctaUrl || 'https://t.me/trungluanmmo',
-          ctaText: service.ctaText || 'Tư vấn ngay',
+          ctaUrl: service.ctaUrl || 'https://zalo.me/0974496371',
+          ctaText: service.ctaText || 'Chat Zalo Tư Vấn',
           highlight: service.highlight || false,
           sortOrder: services.length + 1,
         } as ServiceItem;

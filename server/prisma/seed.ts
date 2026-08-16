@@ -253,9 +253,11 @@ async function main() {
     {
       key: 'personal_info',
       value: JSON.stringify({
-        name: 'LUAN.',
+        name: 'TRUNG LUÂN',
         fullName: 'Mai Trung Luân',
-        shortName: 'LUAN.DEV',
+        shortName: 'LUAN',
+        phone: '0974496371',
+        zalo: 'https://zalo.me/0974496371',
         taglines: [
           'CREATIVE DEVELOPER',
           'SYSTEM & AUTOMATION',
@@ -264,9 +266,9 @@ async function main() {
         location: 'Cát Tiến, Phù Cát, Bình Định',
         year: 2026,
         email: 'contact@trungluanmmo.com',
-        telegram: 'https://t.me/trungluanmmo',
-        facebook: 'https://facebook.com',
-        instagram: 'https://instagram.com',
+        telegram: 'https://t.me/hayakiteno',
+        facebook: 'https://www.facebook.com/100035955261664',
+        instagram: 'https://instagram.com/teno_wbd',
         mapsEmbedUrl:
           'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.7637180674196!2d109.2366403!3d14.0320154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x316f4783a9870509%3A0x9cc7d822ab0ca8d2!2sTrung%20Lu%C3%A2n%20MMO!5e0!3m2!1svi!2svn!4v1700000000000!5m2!1svi!2svn',
         mapsPublicUrl: 'https://maps.app.goo.gl/a6FLgXSrK6skTnnE9',
@@ -293,7 +295,7 @@ async function main() {
     },
   ];
 
-  // Seed Services
+  // Seed Services (Zalo Prioritized)
   const INITIAL_SERVICES = [
     {
       id: 'facebook',
@@ -308,8 +310,8 @@ async function main() {
         'Viết Tool / Bot tự động Check LIVE/DIE & Quản lý tài khoản số lượng lớn',
         'Khắc phục sự cố, bảo mật & mở khóa tài khoản Facebook nhanh chóng',
       ]),
-      ctaUrl: 'https://t.me/trungluanmmo',
-      ctaText: 'Tư vấn Facebook ngay',
+      ctaUrl: 'https://zalo.me/0974496371',
+      ctaText: 'Chat Zalo Tư Vấn Facebook',
       highlight: true,
       sortOrder: 1,
     },
@@ -326,8 +328,8 @@ async function main() {
         'Tối ưu SEO Top 1 Google Search & Google Maps cho cửa hàng, doanh nghiệp',
         'Kháng nghị, xử lý Maps bị tạm ngưng hoặc đổi thông tin nhanh chóng',
       ]),
-      ctaUrl: 'https://t.me/trungluanmmo',
-      ctaText: 'Tư vấn Google Maps',
+      ctaUrl: 'https://zalo.me/0974496371',
+      ctaText: 'Tư Vấn Google Maps Qua Zalo',
       highlight: true,
       sortOrder: 2,
     },
@@ -344,8 +346,8 @@ async function main() {
         'Tư vấn định hướng nội dung & chiến lược xây kênh TikTok bền vững',
         'Tool / Script tự động hóa đăng bài, quét dữ liệu xu hướng TikTok',
       ]),
-      ctaUrl: 'https://t.me/trungluanmmo',
-      ctaText: 'Tư vấn TikTok ngay',
+      ctaUrl: 'https://zalo.me/0974496371',
+      ctaText: 'Nhắn Zalo Tư Vấn TikTok',
       highlight: false,
       sortOrder: 3,
     },
@@ -362,8 +364,8 @@ async function main() {
         'Tối ưu SEO Tiêu đề, Thẻ Tag, Thumbnail đạt Top tìm kiếm YouTube',
         'Hỗ trợ chiến lược phát triển Video dài & YouTube Shorts',
       ]),
-      ctaUrl: 'https://t.me/trungluanmmo',
-      ctaText: 'Tư vấn YouTube',
+      ctaUrl: 'https://zalo.me/0974496371',
+      ctaText: 'Tư Vấn YouTube Qua Zalo',
       highlight: false,
       sortOrder: 4,
     },
@@ -380,8 +382,8 @@ async function main() {
         'Seeding bình luận bán hàng và uy tín cho shop thương mại điện tử',
         'Giải pháp bảo vệ bản quyền hình ảnh và an toàn tài khoản',
       ]),
-      ctaUrl: 'https://t.me/trungluanmmo',
-      ctaText: 'Tư vấn Instagram',
+      ctaUrl: 'https://zalo.me/0974496371',
+      ctaText: 'Tư Vấn Instagram Qua Zalo',
       highlight: false,
       sortOrder: 5,
     },
@@ -398,24 +400,30 @@ async function main() {
         'Xây dựng hệ thống Backend .NET / Node.js / Python chạy liên tục 24/7',
         'Bàn giao đầy đủ Source Code và hướng dẫn vận hành chi tiết',
       ]),
-      ctaUrl: 'https://t.me/trungluanmmo',
-      ctaText: 'Đặt làm Web / Bot',
+      ctaUrl: 'https://zalo.me/0974496371',
+      ctaText: 'Đặt Làm Web / Bot (Zalo)',
       highlight: true,
       sortOrder: 6,
     },
   ];
 
-  for (const srv of INITIAL_SERVICES) {
-    const existing = await (prisma as any).service.findUnique({
-      where: { id: srv.id },
+  for (const s of defaultSettings) {
+    await (prisma as any).siteSetting.upsert({
+      where: { key: s.key },
+      update: { value: s.value },
+      create: s,
     });
-    if (!existing) {
-      await (prisma as any).service.create({
-        data: srv,
-      });
-    }
   }
-  console.log(`✅ Đã đồng bộ ${INITIAL_SERVICES.length} dịch vụ MMO vào Database`);
+  console.log(`✅ Đã đồng bộ cài đặt thông tin cá nhân & Zalo/FB/Tele/IG vào Database`);
+
+  for (const srv of INITIAL_SERVICES) {
+    await (prisma as any).service.upsert({
+      where: { id: srv.id },
+      update: srv,
+      create: srv,
+    });
+  }
+  console.log(`✅ Đã đồng bộ ${INITIAL_SERVICES.length} dịch vụ MMO ưu tiên Zalo vào Database`);
 
   console.log('🎉 Seeding Database hoàn tất thành công!');
 }

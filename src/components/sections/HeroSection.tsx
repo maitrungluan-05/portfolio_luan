@@ -171,7 +171,19 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Bottom-right: Action CTAs */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3">
+          <Magnet padding={60} strength={3}>
+            <a
+              href="https://zalo.me/0974496371"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-2.5 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-[#0068FF] hover:bg-[#0052cc] text-white font-bold text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(0,104,255,0.4)] hover:shadow-[0_0_30px_rgba(0,104,255,0.6)] hover:scale-[1.03] transition-all duration-300 focus:outline-none border border-white/20"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span>TƯ VẤN ZALO (0974.496.371)</span>
+            </a>
+          </Magnet>
+
           <Magnet padding={60} strength={3}>
             <a
               href="#services"
@@ -179,9 +191,9 @@ export const HeroSection: React.FC = () => {
                 e.preventDefault();
                 document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="group flex items-center gap-2.5 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-gradient-to-r from-[#00D2FF] to-[#0066FF] text-black font-bold text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(0,210,255,0.4)] hover:shadow-[0_0_30px_rgba(0,210,255,0.6)] hover:scale-[1.03] transition-all duration-300 focus:outline-none"
+              className="group flex items-center gap-2 px-4 sm:px-5 py-3 sm:py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white border border-white/20 hover:border-sky-400/50 backdrop-blur-xl text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all duration-300 focus:outline-none shadow-lg"
             >
-              <Sparkles size={14} className="text-black" />
+              <Sparkles size={14} className="text-[#00D2FF]" />
               <span>DỊCH VỤ MMO</span>
             </a>
           </Magnet>
@@ -190,13 +202,13 @@ export const HeroSection: React.FC = () => {
             <a
               href="#about"
               onClick={scrollToAbout}
-              className="group hidden md:flex items-center gap-3 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-white/10 hover:bg-white/15 text-white border border-white/20 hover:border-sky-400/50 backdrop-blur-xl transition-all duration-300 focus:outline-none shadow-lg"
+              className="group hidden lg:flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-3.5 rounded-full bg-white/5 hover:bg-white/10 text-white/80 hover:text-white border border-white/10 backdrop-blur-xl transition-all duration-300 focus:outline-none"
             >
-              <span className="text-xs sm:text-sm font-medium tracking-[0.2em] uppercase">
+              <span className="text-xs font-medium tracking-[0.2em] uppercase">
                 VỀ TÔI
               </span>
-              <div className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-300">
-                <ArrowDown size={13} className="transition-transform duration-300 group-hover:translate-y-0.5" />
+              <div className="w-4 h-4 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors duration-300">
+                <ArrowDown size={11} className="transition-transform duration-300 group-hover:translate-y-0.5" />
               </div>
             </a>
           </Magnet>

@@ -803,8 +803,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                             'Tăng tương tác người dùng thật',
                             'Bảo mật & Tối ưu hiệu quả',
                           ],
-                          ctaUrl: 'https://t.me/trungluanmmo',
-                          ctaText: 'Tư vấn ngay',
+                          ctaUrl: 'https://zalo.me/0974496371',
+                          ctaText: 'Chat Zalo Tư Vấn',
                           highlight: false,
                           sortOrder: services.length + 1,
                         });
@@ -2149,9 +2149,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                   <label className="block text-white/70 uppercase mb-1">Link nút CTA</label>
                   <input
                     type="text"
-                    value={editingServiceItem.ctaUrl || 'https://t.me/trungluanmmo'}
+                    value={editingServiceItem.ctaUrl || 'https://zalo.me/0974496371'}
                     onChange={(e) => setEditingServiceItem({ ...editingServiceItem, ctaUrl: e.target.value })}
-                    placeholder="https://t.me/trungluanmmo"
+                    placeholder="https://zalo.me/0974496371"
                     className="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white"
                   />
                 </div>
