@@ -9,7 +9,7 @@ export const PERSONAL_INFO = {
   taglines: ['WEB DEVELOPER', 'DIGITAL CREATOR', 'BASED IN VIETNAM'],
   location: 'Cát Tiến, Bình Định, Việt Nam',
   year: '2026',
-  email: 'contact@trungluanmmo.com',
+  email: 'maitrungluan@gmail.com',
   telegram: 'https://t.me/hayakiteno',
   facebook: 'https://www.facebook.com/100035955261664',
   instagram: 'https://instagram.com/teno_wbd',
@@ -269,8 +269,8 @@ export const CONTACT_CHANNELS: ContactLink[] = [
   },
   {
     name: 'EMAIL',
-    handle: 'contact@trungluanmmo.com',
-    url: 'mailto:contact@trungluanmmo.com',
+    handle: 'maitrungluan@gmail.com',
+    url: 'mailto:maitrungluan@gmail.com',
     category: 'Hợp tác & Dự án lớn',
   },
 ];

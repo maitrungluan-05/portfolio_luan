@@ -265,7 +265,7 @@ async function main() {
         ],
         location: 'Cát Tiến, Phù Cát, Bình Định',
         year: 2026,
-        email: 'contact@trungluanmmo.com',
+        email: 'maitrungluan@gmail.com',
         telegram: 'https://t.me/hayakiteno',
         facebook: 'https://www.facebook.com/100035955261664',
         instagram: 'https://instagram.com/teno_wbd',

@@ -131,7 +131,7 @@ export const Navbar: React.FC = () => {
                 MAI TRUNG LUÂN — BASED IN VIETNAM
               </span>
               <span className="text-xs font-mono text-zinc-400">
-                contact@trungluanmmo.com
+                {personalInfo.email || 'maitrungluan@gmail.com'}
               </span>
             </div>
           </motion.div>
