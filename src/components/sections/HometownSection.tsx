@@ -61,7 +61,7 @@ export const HometownSection: React.FC = () => {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-zinc-300">
               <MapPin size={13} className="text-sky-400" />
               <span className="text-[11px] font-mono tracking-[0.2em] uppercase font-medium">
-                CÁT TIẾN • PHÙ CÁT • BÌNH ĐỊNH
+                CHÁNH OAI • CÁT TIẾN
               </span>
             </div>
           </FadeIn>

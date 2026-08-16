@@ -7,7 +7,7 @@ export const PERSONAL_INFO = {
   phone: '0974496371',
   zalo: 'https://zalo.me/0974496371',
   taglines: ['WEB DEVELOPER', 'DIGITAL CREATOR', 'BASED IN VIETNAM'],
-  location: 'Cát Tiến, Bình Định, Việt Nam',
+  location: 'Chánh Oai — Cát Tiến (Gia Lai / Bình Định)',
   year: '2026',
   email: 'maitrungluan@gmail.com',
   telegram: 'https://t.me/hayakiteno',
@@ -131,12 +131,12 @@ export const PROJECTS: ProjectItem[] = [
 
 export const HOMETOWN_STORY = {
   title: 'NƠI TÔI BẮT ĐẦU',
-  locationName: 'CÁT TIẾN — BÌNH ĐỊNH',
+  locationName: 'CHÁNH OAI — CÁT TIẾN',
   paragraphs: [
-    'Trước khi có những dòng code, những dự án và những ý tưởng trên Internet, tôi bắt đầu từ một nơi rất bình dị.',
-    'Đây là quê hương của tôi — một phần trong câu chuyện mà tôi luôn muốn giữ lại.',
+    'Chánh Oai (Cát Tiến) — vùng đất đong đầy ký ức tuổi thơ, nơi trước đây thuộc Chánh Oai, Cát Hải, Phù Cát, Bình Định.',
+    'Dù ở bất cứ đâu, nguồn cội Chánh Oai luôn là điểm tựa vững chắc, nơi nuôi dưỡng sự kiên trì, đam mê và khát khao tạo ra những giá trị công nghệ thực thụ.',
   ],
-  quote: 'Biển xanh, bình minh rạng rỡ và ngọn gió miền Trung nuôi dưỡng sự kiên định trong từng dòng mã.',
+  quote: 'Từ miền gió cát Chánh Oai vươn ra thế giới công nghệ số.',
   heroImage: '/images/hometown-hero.jpg',
 };
 
