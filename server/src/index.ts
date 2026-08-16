@@ -15,6 +15,7 @@ import contactRoutes from './routes/contactRoutes';
 import uploadRoutes from './routes/uploadRoutes';
 import settingsRoutes from './routes/settingsRoutes';
 import servicesRoutes from './routes/servicesRoutes';
+import aiRoutes from './routes/aiRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -42,6 +43,7 @@ app.use('/api/projects', projectsRoutes);
 app.use('/api/moments', momentsRoutes);
 app.use('/api/journey', journeyRoutes);
 app.use('/api/services', servicesRoutes);
+app.use('/api/ai', aiRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/settings', settingsRoutes);

@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import type { ProjectItem, MomentItem, JourneyItem, WhatIDoItem, ServiceItem } from '../../types';
+import { analyzeImageWithAI } from '../../services/aiVisionService';
 
 interface AdminPortalProps {
   isOpen: boolean;
@@ -115,10 +116,67 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
 
   const [actionMessage, setActionMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isAiAnalyzing, setIsAiAnalyzing] = useState(false);
 
   const showToast = (text: string, type: 'success' | 'error' = 'success') => {
     setActionMessage({ text, type });
     setTimeout(() => setActionMessage(null), 3000);
+  };
+
+  // AI Smart Auto-Fill for Moment
+  const handleAiAutoFillMoment = async (imageSource?: string | File) => {
+    if (!editingMoment) return;
+    const targetSource = imageSource || editingMoment.image;
+    if (!targetSource) {
+      showToast('Vui lòng chọn hoặc nhập link ảnh trước', 'error');
+      return;
+    }
+
+    setIsAiAnalyzing(true);
+    try {
+      const suggestion = await analyzeImageWithAI(targetSource, 'moment');
+      setEditingMoment((prev) => ({
+        ...prev,
+        title: suggestion.title,
+        category: suggestion.category,
+        location: suggestion.location,
+        aspectRatio: suggestion.aspectRatio,
+        caption: suggestion.caption,
+      }));
+      showToast('✨ AI đã phân tích ảnh và tự động điền form thành công!');
+    } catch {
+      showToast('Không thể phân tích ảnh tự động', 'error');
+    } finally {
+      setIsAiAnalyzing(false);
+    }
+  };
+
+  // AI Smart Auto-Fill for Project
+  const handleAiAutoFillProject = async (imageSource?: string | File) => {
+    if (!editingProject) return;
+    const targetSource = imageSource || (editingProject.images && editingProject.images[0]);
+    if (!targetSource) {
+      showToast('Vui lòng upload ít nhất 1 ảnh dự án trước', 'error');
+      return;
+    }
+
+    setIsAiAnalyzing(true);
+    try {
+      const suggestion = await analyzeImageWithAI(targetSource, 'project');
+      setEditingProject((prev) => ({
+        ...prev,
+        name: prev?.name || suggestion.title,
+        type: prev?.type || suggestion.category,
+        description: suggestion.caption,
+        longDescription: suggestion.description,
+        technologies: suggestion.technologies || prev?.technologies || ['React', 'TypeScript', 'Node.js'],
+      }));
+      showToast('✨ AI đã phân tích ảnh dự án và tự điền thông tin!');
+    } catch {
+      showToast('Lỗi phân tích ảnh AI', 'error');
+    } finally {
+      setIsAiAnalyzing(false);
+    }
   };
 
   // Handle Login
@@ -144,11 +202,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     setIsUploading(false);
     if (res.success && editingProject) {
       const currentImages = editingProject.images || [];
+      const updatedImages = [...currentImages, res.url];
       setEditingProject({
         ...editingProject,
-        images: [...currentImages, res.url],
+        images: updatedImages,
       });
       showToast('Tải ảnh dự án lên thành công');
+      // Auto-trigger AI if fields are blank
+      if (!editingProject.name || !editingProject.description) {
+        handleAiAutoFillProject(file);
+      }
     } else {
       showToast(res.message || 'Lỗi tải ảnh', 'error');
     }
@@ -167,6 +230,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
         image: res.url,
       });
       showToast('Tải ảnh khoảnh khắc lên thành công');
+      // Auto-trigger AI to auto-fill title, caption, location, category
+      handleAiAutoFillMoment(file);
     } else {
       showToast(res.message || 'Lỗi tải ảnh', 'error');
     }
@@ -1607,7 +1672,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
 
               {/* Image Upload & Management */}
               <div>
-                <label className="block text-white/70 uppercase mb-1">Hình ảnh dự án</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-white/70 uppercase">Hình ảnh dự án</label>
+                  <button
+                    type="button"
+                    disabled={isAiAnalyzing || !editingProject.images || editingProject.images.length === 0}
+                    onClick={() => handleAiAutoFillProject()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-[#00D2FF]/20 to-[#9945FF]/20 hover:from-[#00D2FF]/30 hover:to-[#9945FF]/30 border border-[#00D2FF]/40 text-[#00D2FF] hover:text-white text-[11px] font-bold transition-all disabled:opacity-30"
+                  >
+                    <Sparkles size={13} className={`text-[#FFB800] ${isAiAnalyzing ? 'animate-spin' : 'animate-pulse'}`} />
+                    <span>{isAiAnalyzing ? 'AI đang phân tích...' : '✨ AI Gợi Ý Tên & Mô Tả'}</span>
+                  </button>
+                </div>
                 <div className="flex items-center gap-3">
                   <label className="cursor-pointer inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white">
                     <Upload size={14} />
@@ -1725,7 +1801,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
               </div>
 
               <div>
-                <label className="block text-white/70 uppercase mb-1">Hình ảnh khoảnh khắc</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-white/70 uppercase">Hình ảnh khoảnh khắc</label>
+                  <button
+                    type="button"
+                    disabled={isAiAnalyzing || !editingMoment.image}
+                    onClick={() => handleAiAutoFillMoment()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-[#00D2FF]/20 to-[#9945FF]/20 hover:from-[#00D2FF]/30 hover:to-[#9945FF]/30 border border-[#00D2FF]/40 text-[#00D2FF] hover:text-white text-[11px] font-bold transition-all disabled:opacity-30"
+                  >
+                    <Sparkles size={13} className={`text-[#FFB800] ${isAiAnalyzing ? 'animate-spin' : 'animate-pulse'}`} />
+                    <span>{isAiAnalyzing ? 'AI đang phân tích...' : '✨ AI Tự Nhìn Ảnh & Điền Form'}</span>
+                  </button>
+                </div>
                 <div className="flex items-center gap-3">
                   <input
                     type="text"
@@ -1742,8 +1829,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                   </label>
                 </div>
                 {editingMoment.image && (
-                  <div className="mt-2 w-24 h-16 rounded-lg overflow-hidden border border-white/20">
-                    <img src={editingMoment.image} alt="preview" className="w-full h-full object-cover" />
+                  <div className="mt-2 flex items-center gap-3">
+                    <div className="w-24 h-16 rounded-lg overflow-hidden border border-white/20">
+                      <img src={editingMoment.image} alt="preview" className="w-full h-full object-cover" />
+                    </div>
+                    <span className="text-[11px] text-[#D7E2EA]/50">
+                      💡 Mẹo: Upload ảnh xong AI sẽ tự động đoán tiêu đề & viết caption giúp bạn!
+                    </span>
                   </div>
                 )}
               </div>
