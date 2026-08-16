@@ -61,8 +61,8 @@ export const GoogleMapsSection: React.FC = () => {
 
               <div className="space-y-0.5 mb-4 font-black uppercase text-lg sm:text-xl text-white tracking-tight leading-tight">
                 <div className="text-sky-400">TRUNG LUÂN MMO</div>
-                <div className="text-zinc-200 text-sm font-semibold">CHÁNH OAI, CÁT TIẾN</div>
-                <div className="text-zinc-400 text-xs font-mono">VIỆT NAM</div>
+                <div className="text-zinc-200 text-sm font-semibold">THÔN CHÁNH OAI, CÁT TIẾN, GIA LAI</div>
+                <div className="text-zinc-400 text-xs font-mono">CỘI NGUỒN: PHÙ CÁT, BÌNH ĐỊNH</div>
               </div>
 
               <Magnet padding={40} strength={3}>

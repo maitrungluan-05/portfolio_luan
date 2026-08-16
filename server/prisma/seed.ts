@@ -263,7 +263,7 @@ async function main() {
           'SYSTEM & AUTOMATION',
           'BASED IN BINH DINH, VIETNAM',
         ],
-        location: 'Chánh Oai — Cát Tiến (Gia Lai / Bình Định)',
+        location: 'Thôn Chánh Oai, Xã Cát Tiến, Tỉnh Gia Lai',
         year: 2026,
         email: 'maitrungluan@gmail.com',
         telegram: 'https://t.me/hayakiteno',
@@ -277,19 +277,19 @@ async function main() {
     {
       key: 'about',
       value: JSON.stringify({
-        text: 'Tôi là Mai Trung Luân — một lập trình viên trẻ xuất thân từ Chánh Oai, Cát Tiến (nguồn cội Chánh Oai, Cát Hải, Phù Cát, Bình Định). Đam mê xây dựng các sản phẩm số tinh tế, hệ thống tự động hóa hiệu quả và trải nghiệm web tương tác giàu tính thị giác.',
+        text: 'Tôi là Mai Trung Luân — lập trình viên trẻ với cội nguồn từ Thôn Chánh Oai, Xã Cát Hải, Huyện Phù Cát, Tỉnh Bình Định (nay là Thôn Chánh Oai, Xã Cát Tiến, Tỉnh Gia Lai). Đam mê xây dựng các sản phẩm số tinh tế, hệ thống tự động hóa hiệu quả và trải nghiệm web tương tác giàu tính thị giác.',
       }),
     },
     {
       key: 'hometown',
       value: JSON.stringify({
         title: 'NƠI TÔI BẮT ĐẦU',
-        locationName: 'CHÁNH OAI — CÁT TIẾN',
+        locationName: 'THÔN CHÁNH OAI — CÁT TIẾN',
         paragraphs: [
-          'Chánh Oai (Cát Tiến) — vùng đất đong đầy ký ức tuổi thơ, nơi trước đây thuộc Chánh Oai, Cát Hải, Phù Cát, Bình Định với bờ biển trải dài và những đồi cát lộng gió.',
-          'Dù ở bất cứ đâu, nguồn cội Chánh Oai luôn là điểm tựa vững chắc, nơi nuôi dưỡng sự kiên trì, đam mê và khát khao tạo ra những giá trị công nghệ thực thụ.',
+          'Cội nguồn sinh ra và lớn lên tại Thôn Chánh Oai, Xã Cát Hải, Huyện Phù Cát, Tỉnh Bình Định — nay được đổi thành Thôn Chánh Oai, Xã Cát Tiến, Tỉnh Gia Lai.',
+          'Dù địa giới hành chính có đổi thay theo thời gian, miền gió cát Chánh Oai đong đầy ký ức tuổi thơ luôn là điểm tựa vững chắc, nuôi dưỡng sự kiên trì, đam mê và khát khao tạo ra những giá trị công nghệ thực thụ.',
         ],
-        quote: 'Từ miền gió cát Chánh Oai vươn ra thế giới công nghệ số.',
+        quote: 'Từ cội nguồn Thôn Chánh Oai vững bước vươn ra thế giới công nghệ số.',
         heroImage: '/images/hometown-hero.jpg',
       }),
     },

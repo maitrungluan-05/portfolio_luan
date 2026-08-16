@@ -7,7 +7,7 @@ export const PERSONAL_INFO = {
   phone: '0974496371',
   zalo: 'https://zalo.me/0974496371',
   taglines: ['WEB DEVELOPER', 'DIGITAL CREATOR', 'BASED IN VIETNAM'],
-  location: 'Chánh Oai — Cát Tiến (Gia Lai / Bình Định)',
+  location: 'Thôn Chánh Oai, Xã Cát Tiến, Tỉnh Gia Lai',
   year: '2026',
   email: 'maitrungluan@gmail.com',
   telegram: 'https://t.me/hayakiteno',
@@ -131,12 +131,12 @@ export const PROJECTS: ProjectItem[] = [
 
 export const HOMETOWN_STORY = {
   title: 'NƠI TÔI BẮT ĐẦU',
-  locationName: 'CHÁNH OAI — CÁT TIẾN',
+  locationName: 'THÔN CHÁNH OAI — CÁT TIẾN',
   paragraphs: [
-    'Chánh Oai (Cát Tiến) — vùng đất đong đầy ký ức tuổi thơ, nơi trước đây thuộc Chánh Oai, Cát Hải, Phù Cát, Bình Định.',
-    'Dù ở bất cứ đâu, nguồn cội Chánh Oai luôn là điểm tựa vững chắc, nơi nuôi dưỡng sự kiên trì, đam mê và khát khao tạo ra những giá trị công nghệ thực thụ.',
+    'Cội nguồn sinh ra và lớn lên tại Thôn Chánh Oai, Xã Cát Hải, Huyện Phù Cát, Tỉnh Bình Định — nay được đổi thành Thôn Chánh Oai, Xã Cát Tiến, Tỉnh Gia Lai.',
+    'Dù địa giới hành chính có đổi thay theo thời gian, miền gió cát Chánh Oai đong đầy ký ức tuổi thơ luôn là điểm tựa vững chắc, nuôi dưỡng sự kiên trì, đam mê và khát khao tạo ra những giá trị công nghệ thực thụ.',
   ],
-  quote: 'Từ miền gió cát Chánh Oai vươn ra thế giới công nghệ số.',
+  quote: 'Từ cội nguồn Thôn Chánh Oai vững bước vươn ra thế giới công nghệ số.',
   heroImage: '/images/hometown-hero.jpg',
 };
 
