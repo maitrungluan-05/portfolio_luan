@@ -1,4 +1,4 @@
-import type { ProjectItem, MomentItem, JourneyItem } from '../types';
+import type { ProjectItem, MomentItem, JourneyItem, ServiceItem } from '../types';
 
 export interface ContactMessage {
   id: string;
@@ -38,166 +38,218 @@ const authHeaders = () => {
   };
 };
 
+// Helper to safely handle fetch responses and prevent "Unexpected end of JSON input" errors
+async function handleResponse<T = any>(res: Response): Promise<T> {
+  const contentType = res.headers.get('content-type') || '';
+  
+  if (contentType.includes('application/json')) {
+    try {
+      const data = await res.json();
+      return data;
+    } catch {
+      throw new Error('Không thể đọc dữ liệu JSON phản hồi từ máy chủ.');
+    }
+  }
+
+  const text = await res.text();
+  if (!res.ok) {
+    if (res.status === 502 || res.status === 504 || res.status === 500 || !text) {
+      throw new Error('Máy chủ Backend (Port 5000) chưa được khởi chạy hoặc không phản hồi. Hãy chạy lệnh "npm run dev" trong terminal.');
+    }
+    throw new Error(`Máy chủ trả về lỗi ${res.status}: ${text || res.statusText}`);
+  }
+
+  if (!text || text.trim() === '') {
+    return { success: true } as unknown as T;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { success: true, raw: text } as unknown as T;
+  }
+}
+
+const safeFetch = async <T = any>(url: string, options?: RequestInit): Promise<T> => {
+  try {
+    const res = await fetch(url, options);
+    return await handleResponse<T>(res);
+  } catch (err: any) {
+    if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('fetch failed'))) {
+      throw new Error('Không thể kết nối đến Backend Server (Port 5000). Vui lòng chạy "npm run dev" để khởi động đầy đủ hệ thống.');
+    }
+    throw err;
+  }
+};
+
 export const api = {
   // Auth
   login: async (username: string, password: string) => {
-    const res = await fetch(`${API_BASE}/auth/login`, {
+    return safeFetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     });
-    return res.json();
   },
 
   getMe: async () => {
-    const res = await fetch(`${API_BASE}/auth/me`, {
+    return safeFetch(`${API_BASE}/auth/me`, {
       headers: authHeaders(),
     });
-    return res.json();
   },
 
   // Projects
   getProjects: async (): Promise<{ success: boolean; data: ProjectItem[] }> => {
-    const res = await fetch(`${API_BASE}/projects`);
-    return res.json();
+    return safeFetch(`${API_BASE}/projects`);
   },
 
   createProject: async (project: Partial<ProjectItem>) => {
-    const res = await fetch(`${API_BASE}/projects`, {
+    return safeFetch(`${API_BASE}/projects`, {
       method: 'POST',
       headers: authHeaders(),
       body: JSON.stringify(project),
     });
-    return res.json();
   },
 
   updateProject: async (id: string, project: Partial<ProjectItem>) => {
-    const res = await fetch(`${API_BASE}/projects/${id}`, {
+    return safeFetch(`${API_BASE}/projects/${id}`, {
       method: 'PUT',
       headers: authHeaders(),
       body: JSON.stringify(project),
     });
-    return res.json();
   },
 
   deleteProject: async (id: string) => {
-    const res = await fetch(`${API_BASE}/projects/${id}`, {
+    return safeFetch(`${API_BASE}/projects/${id}`, {
       method: 'DELETE',
       headers: authHeaders(),
     });
-    return res.json();
   },
 
   // Moments
   getMoments: async (): Promise<{ success: boolean; data: MomentItem[] }> => {
-    const res = await fetch(`${API_BASE}/moments`);
-    return res.json();
+    return safeFetch(`${API_BASE}/moments`);
   },
 
   createMoment: async (moment: Partial<MomentItem>) => {
-    const res = await fetch(`${API_BASE}/moments`, {
+    return safeFetch(`${API_BASE}/moments`, {
       method: 'POST',
       headers: authHeaders(),
       body: JSON.stringify(moment),
     });
-    return res.json();
   },
 
   updateMoment: async (id: string, moment: Partial<MomentItem>) => {
-    const res = await fetch(`${API_BASE}/moments/${id}`, {
+    return safeFetch(`${API_BASE}/moments/${id}`, {
       method: 'PUT',
       headers: authHeaders(),
       body: JSON.stringify(moment),
     });
-    return res.json();
   },
 
   deleteMoment: async (id: string) => {
-    const res = await fetch(`${API_BASE}/moments/${id}`, {
+    return safeFetch(`${API_BASE}/moments/${id}`, {
       method: 'DELETE',
       headers: authHeaders(),
     });
-    return res.json();
   },
 
   // Journey
   getJourney: async (): Promise<{ success: boolean; data: JourneyItem[] }> => {
-    const res = await fetch(`${API_BASE}/journey`);
-    return res.json();
+    return safeFetch(`${API_BASE}/journey`);
   },
 
   createJourneyStep: async (step: Partial<JourneyItem>) => {
-    const res = await fetch(`${API_BASE}/journey`, {
+    return safeFetch(`${API_BASE}/journey`, {
       method: 'POST',
       headers: authHeaders(),
       body: JSON.stringify(step),
     });
-    return res.json();
   },
 
   updateJourneyStep: async (id: string, step: Partial<JourneyItem>) => {
-    const res = await fetch(`${API_BASE}/journey/${id}`, {
+    return safeFetch(`${API_BASE}/journey/${id}`, {
       method: 'PUT',
       headers: authHeaders(),
       body: JSON.stringify(step),
     });
-    return res.json();
   },
 
   deleteJourneyStep: async (id: string) => {
-    const res = await fetch(`${API_BASE}/journey/${id}`, {
+    return safeFetch(`${API_BASE}/journey/${id}`, {
       method: 'DELETE',
       headers: authHeaders(),
     });
-    return res.json();
   },
 
   // Contact
   submitContact: async (data: { name: string; email: string; message: string }) => {
-    const res = await fetch(`${API_BASE}/contact`, {
+    return safeFetch(`${API_BASE}/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    return res.json();
   },
 
   getMessages: async (): Promise<{ success: boolean; data: ContactMessage[] }> => {
-    const res = await fetch(`${API_BASE}/contact/messages`, {
+    return safeFetch(`${API_BASE}/contact/messages`, {
       headers: authHeaders(),
     });
-    return res.json();
   },
 
   toggleMessageRead: async (id: string) => {
-    const res = await fetch(`${API_BASE}/contact/messages/${id}/read`, {
+    return safeFetch(`${API_BASE}/contact/messages/${id}/read`, {
       method: 'PATCH',
       headers: authHeaders(),
     });
-    return res.json();
   },
 
   deleteMessage: async (id: string) => {
-    const res = await fetch(`${API_BASE}/contact/messages/${id}`, {
+    return safeFetch(`${API_BASE}/contact/messages/${id}`, {
       method: 'DELETE',
       headers: authHeaders(),
     });
-    return res.json();
+  },
+
+  // Services
+  getServices: async (): Promise<{ success: boolean; data: ServiceItem[] }> => {
+    return safeFetch(`${API_BASE}/services`);
+  },
+
+  createService: async (service: Partial<ServiceItem>) => {
+    return safeFetch(`${API_BASE}/services`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify(service),
+    });
+  },
+
+  updateService: async (id: string, service: Partial<ServiceItem>) => {
+    return safeFetch(`${API_BASE}/services/${id}`, {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify(service),
+    });
+  },
+
+  deleteService: async (id: string) => {
+    return safeFetch(`${API_BASE}/services/${id}`, {
+      method: 'DELETE',
+      headers: authHeaders(),
+    });
   },
 
   // Settings
   getSettings: async (): Promise<{ success: boolean; data: Record<string, any> }> => {
-    const res = await fetch(`${API_BASE}/settings`);
-    return res.json();
+    return safeFetch(`${API_BASE}/settings`);
   },
 
   updateSetting: async (key: string, value: any) => {
-    const res = await fetch(`${API_BASE}/settings/${key}`, {
+    return safeFetch(`${API_BASE}/settings/${key}`, {
       method: 'PUT',
       headers: authHeaders(),
       body: JSON.stringify({ value }),
     });
-    return res.json();
   },
 
   // Image Upload
@@ -206,11 +258,10 @@ export const api = {
     formData.append('image', file);
 
     const token = getAuthToken();
-    const res = await fetch(`${API_BASE}/upload`, {
+    return safeFetch(`${API_BASE}/upload`, {
       method: 'POST',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
       body: formData,
     });
-    return res.json();
   },
 };

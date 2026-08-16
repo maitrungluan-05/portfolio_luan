@@ -22,7 +22,7 @@ export interface WhatIDoItem {
 export interface MomentItem {
   id: string;
   title: string;
-  category: 'TRAVEL' | 'HOMETOWN' | 'WORK' | 'LIFESTYLE';
+  category: string;
   location: string;
   aspectRatio: 'portrait' | 'landscape' | 'square' | 'wide';
   image: string;
@@ -53,4 +53,18 @@ export interface StoryCardItem {
   title: string;
   image: string;
   subtitle: string;
+}
+
+export interface ServiceItem {
+  id: string;
+  category: string;
+  icon?: string;
+  accentColor?: string;
+  title: string;
+  tagline: string;
+  features: string[];
+  ctaUrl?: string;
+  ctaText?: string;
+  highlight?: boolean;
+  sortOrder?: number;
 }

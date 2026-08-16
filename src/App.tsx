@@ -6,13 +6,17 @@ import { Footer } from './components/layout/Footer';
 import { HeroSection } from './components/sections/HeroSection';
 import { VisualMarqueeSection } from './components/sections/VisualMarqueeSection';
 import { AboutSection } from './components/sections/AboutSection';
+import { ServicesSection } from './components/sections/ServicesSection';
 import { WhatIDoSection } from './components/sections/WhatIDoSection';
 import { ProjectsSection } from './components/sections/ProjectsSection';
 import { HometownSection } from './components/sections/HometownSection';
 import { GoogleMapsSection } from './components/sections/GoogleMapsSection';
 import { MomentsGallerySection } from './components/sections/MomentsGallerySection';
-import { JourneyTimelineSection } from './components/sections/JourneyTimelineSection';
+import { BookFlipSection } from './components/sections/BookFlipSection';
 import { ContactSection } from './components/sections/ContactSection';
+import { CursorSpotlight } from './components/common/CursorSpotlight';
+import { ScrollProgressBar } from './components/common/ScrollProgressBar';
+import { FloatingStardust } from './components/common/FloatingStardust';
 
 function PortfolioMain() {
   const [adminOpen, setAdminOpen] = useState(false);
@@ -30,7 +34,14 @@ function PortfolioMain() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#0C0C0C] text-[#D7E2EA] font-kanit antialiased selection:bg-[#0066FF]/40 selection:text-white overflow-x-clip">
+    <div className="relative min-h-screen bg-[#0A1322] text-[#FAFAFA] font-kanit antialiased selection:bg-[#00A3FF]/30 selection:text-white overflow-x-clip">
+      {/* Dynamic Cursor Spotlight & Background Stardust Particles */}
+      <CursorSpotlight />
+      <FloatingStardust />
+
+      {/* Top Sunrise / Ocean Scroll Progress Bar */}
+      <ScrollProgressBar />
+
       {/* 0. Top Navigation Bar */}
       <Navbar />
 
@@ -44,10 +55,13 @@ function PortfolioMain() {
         {/* 3. About Me */}
         <AboutSection />
 
-        {/* 4. What I Do (Warm Light Section) */}
+        {/* 4. Services & Solutions (Facebook, Maps, TikTok, YouTube, IG, Bots) */}
+        <ServicesSection />
+
+        {/* 5. What I Do (Expertise & Tech Docs) */}
         <WhatIDoSection />
 
-        {/* 5. Selected Projects (Sticky Stacking Cards) */}
+        {/* 6. Selected Projects (Sticky Stacking Cards & Video Showcase) */}
         <ProjectsSection />
 
         {/* 6. My Hometown (Cinematic Cát Tiến - Bình Định) */}
@@ -59,8 +73,8 @@ function PortfolioMain() {
         {/* 8. Personal Moments Gallery (Horizontal + Lightbox) */}
         <MomentsGallerySection />
 
-        {/* 9. My Journey (Timeline on Warm Light) */}
-        <JourneyTimelineSection />
+        {/* 9. 3D Book Flip Storybook (Scroll to flip pages) */}
+        <BookFlipSection />
 
         {/* 10. Contact Section */}
         <ContactSection />

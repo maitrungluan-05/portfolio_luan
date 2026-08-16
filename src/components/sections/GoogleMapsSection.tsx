@@ -7,12 +7,19 @@ import { Magnet } from '../common/Magnet';
 export const GoogleMapsSection: React.FC = () => {
   const { personalInfo } = useData();
   return (
-    <section className="relative bg-[#0C0C0C] py-24 sm:py-32 px-6 sm:px-8 lg:px-12 z-20">
-      <div className="max-w-7xl mx-auto">
+    <section
+      id="maps"
+      className="relative bg-[#0B1528] py-24 sm:py-32 px-6 sm:px-8 lg:px-12 z-20 overflow-hidden border-t border-[#00A3FF]/20"
+    >
+      {/* Oceanic Azure ambient lighting */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#00A3FF]/12 rounded-full blur-[180px] pointer-events-none animate-aurora" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-12 sm:mb-16">
           <FadeIn delay={0.1}>
-            <span className="text-xs md:text-sm font-mono font-bold tracking-[0.3em] uppercase text-[#00D2FF] mb-3 inline-block">
+            <span className="inline-flex items-center gap-2 text-xs md:text-sm font-mono font-bold tracking-[0.3em] uppercase text-[#00B2FE] mb-3 px-4 py-1.5 rounded-full bg-[#00A3FF]/15 border border-[#00A3FF]/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00B2FE] animate-pulse" />
               // 04 — GEOGRAPHIC ROOTS
             </span>
           </FadeIn>
@@ -24,7 +31,7 @@ export const GoogleMapsSection: React.FC = () => {
           </FadeIn>
 
           <FadeIn delay={0.3}>
-            <p className="mt-3 text-base sm:text-lg md:text-xl text-[#D7E2EA]/65 max-w-2xl font-light">
+            <p className="mt-3 text-base sm:text-lg text-zinc-300 max-w-2xl font-light">
               Một điểm nhỏ trên bản đồ, nhưng là nơi câu chuyện bắt đầu.
             </p>
           </FadeIn>
@@ -32,30 +39,30 @@ export const GoogleMapsSection: React.FC = () => {
 
         {/* Map Container with Floating Card */}
         <FadeIn delay={0.35}>
-          <div className="relative w-full rounded-3xl sm:rounded-[36px] overflow-hidden border border-white/15 shadow-2xl bg-zinc-950 aspect-[4/5] sm:aspect-[16/9] lg:aspect-[16/7]">
+          <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-white/15 shadow-2xl bg-zinc-950 aspect-[4/5] sm:aspect-[16/9] lg:aspect-[16/7]">
             {/* Google Maps Iframe */}
             <iframe
               src={personalInfo.mapsEmbedUrl}
-              title="Bản đồ Cát Tiến, Bình Định"
-              className="w-full h-full border-0 filter grayscale-[60%] invert-[90%] hue-rotate-180 contrast-[1.1] hover:filter-none transition-all duration-700"
+              title="Bản đồ vị trí TRUNG LUÂN MMO"
+              className="w-full h-full border-0 filter grayscale-[40%] invert-[90%] hue-rotate-180 contrast-[1.08] hover:filter-none transition-all duration-700"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen
             />
 
-            {/* Floating Glassmorphism Location Card */}
-            <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 z-20 max-w-xs sm:max-w-sm glass-dark rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-white/20 shadow-2xl">
-              <div className="flex items-center gap-2 mb-3">
-                <Compass size={16} className="text-[#00D2FF] animate-spin-slow" />
-                <span className="text-[11px] font-mono tracking-widest text-[#D7E2EA]/70 uppercase">
-                  TỌA ĐỘ • 13.9782° N, 109.2458° E
+            {/* Floating Location Card */}
+            <div className="absolute bottom-5 left-5 sm:bottom-8 sm:left-8 z-20 max-w-xs sm:max-w-sm glass-card-luminous rounded-2xl p-5 sm:p-6 border border-white/15 shadow-2xl backdrop-blur-2xl">
+              <div className="flex items-center gap-2 mb-2.5">
+                <Compass size={15} className="text-sky-400" />
+                <span className="text-[10px] font-mono tracking-wider text-zinc-300 uppercase font-medium">
+                  TỌA ĐỘ • 14.0320° N, 109.2392° E
                 </span>
               </div>
 
-              <div className="space-y-0.5 mb-5 font-black uppercase text-xl sm:text-2xl text-white tracking-tight leading-tight">
-                <div>CÁT TIẾN</div>
-                <div className="text-[#D7E2EA]/85">BÌNH ĐỊNH</div>
-                <div className="text-[#00D2FF]">VIỆT NAM</div>
+              <div className="space-y-0.5 mb-4 font-black uppercase text-lg sm:text-xl text-white tracking-tight leading-tight">
+                <div className="text-sky-400">TRUNG LUÂN MMO</div>
+                <div className="text-zinc-200 text-sm font-semibold">CÁT TIẾN, BÌNH ĐỊNH</div>
+                <div className="text-zinc-400 text-xs font-mono">VIỆT NAM</div>
               </div>
 
               <Magnet padding={40} strength={3}>
@@ -63,11 +70,11 @@ export const GoogleMapsSection: React.FC = () => {
                   href={personalInfo.mapsPublicUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full accent-btn-gradient text-white text-xs font-semibold uppercase tracking-wider shadow-lg hover:shadow-blue-900/40 transition-all duration-300"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-zinc-100 text-black text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-sky-400/20"
                 >
-                  <Navigation size={13} />
+                  <Navigation size={12} />
                   <span>MỞ TRÊN GOOGLE MAPS</span>
-                  <ExternalLink size={12} />
+                  <ExternalLink size={11} />
                 </a>
               </Magnet>
             </div>

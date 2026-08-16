@@ -5,9 +5,11 @@ import { useData } from '../../context/DataContext';
 
 const NAV_LINKS = [
   { label: 'About', href: '#about' },
+  { label: 'Services', href: '#services' },
   { label: 'Work', href: '#work' },
   { label: 'Hometown', href: '#hometown' },
   { label: 'Moments', href: '#moments' },
+  { label: 'Story Book', href: '#story-book' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -18,7 +20,7 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      setIsScrolled(window.scrollY > 30);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -36,12 +38,12 @@ export const Navbar: React.FC = () => {
   return (
     <>
       <motion.header
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? 'py-3.5 bg-[#0C0C0C]/80 backdrop-blur-xl border-b border-white/10 shadow-2xl'
+            ? 'py-3.5 bg-[#0A1322]/85 backdrop-blur-xl border-b border-[#00A3FF]/20 shadow-xl'
             : 'py-6 bg-transparent'
         }`}
       >
@@ -49,16 +51,16 @@ export const Navbar: React.FC = () => {
           {/* Logo / Left Brand */}
           <a
             href="#"
-            className="group flex items-center gap-2 focus:outline-none"
+            className="group flex items-center gap-2.5 focus:outline-none"
             onClick={(e) => {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           >
-            <span className="font-black text-xl sm:text-2xl tracking-[0.2em] text-[#D7E2EA] transition-opacity duration-200 group-hover:opacity-75">
+            <span className="font-black text-xl tracking-[0.2em] text-[#FAFAFA] transition-opacity duration-200 group-hover:opacity-75">
               {personalInfo.shortName}
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00B2FE] animate-pulse" />
           </a>
 
           {/* Desktop Navigation */}
@@ -68,7 +70,7 @@ export const Navbar: React.FC = () => {
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="text-xs lg:text-sm font-medium tracking-[0.2em] uppercase text-[#D7E2EA] transition-all duration-200 hover:opacity-65 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-[#00D2FF] hover:after:w-full after:transition-all after:duration-300"
+                className="text-xs lg:text-sm font-medium tracking-[0.2em] uppercase text-[#E0F2FE] transition-colors duration-200 hover:text-white relative py-1"
               >
                 {link.label}
               </a>
@@ -77,7 +79,7 @@ export const Navbar: React.FC = () => {
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact')}
-              className="ml-2 px-4 py-2 rounded-full text-xs font-medium uppercase tracking-wider text-white accent-btn-gradient border border-white/10 hover:shadow-lg hover:shadow-blue-900/40 transition-all duration-200"
+              className="ml-2 px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider text-black bg-white hover:bg-zinc-100 hover:shadow-[0_0_20px_rgba(0,163,255,0.4)] transition-all duration-300 shadow-md hover:scale-[1.03]"
             >
               Connect
             </a>
@@ -86,10 +88,10 @@ export const Navbar: React.FC = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-[#D7E2EA] hover:bg-white/5 transition-colors focus:outline-none"
+            className="md:hidden p-2 rounded-lg text-[#FAFAFA] hover:bg-white/5 transition-colors focus:outline-none"
             aria-label={mobileMenuOpen ? 'Đóng menu' : 'Mở menu'}
           >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </motion.header>
@@ -98,14 +100,14 @@ export const Navbar: React.FC = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed inset-0 z-30 bg-[#0C0C0C]/98 backdrop-blur-2xl flex flex-col justify-between p-8 sm:p-12 pt-28 md:hidden"
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="fixed inset-0 z-30 bg-[#0A1322]/98 backdrop-blur-2xl flex flex-col justify-between p-8 sm:p-12 pt-28 md:hidden"
           >
             <div className="flex flex-col space-y-6">
-              <span className="text-xs font-mono tracking-[0.3em] text-[#00D2FF] uppercase">
+              <span className="text-xs font-mono tracking-[0.3em] text-[#00B2FE] uppercase">
                 // MENU
               </span>
               {NAV_LINKS.map((link, index) => (
@@ -113,22 +115,22 @@ export const Navbar: React.FC = () => {
                   key={link.label}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  initial={{ opacity: 0, x: -30 }}
+                  initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 + index * 0.06 }}
-                  className="flex items-center justify-between text-3xl font-bold uppercase tracking-wide text-[#D7E2EA] hover:text-white hover:pl-2 transition-all duration-200 border-b border-white/10 pb-4"
+                  transition={{ delay: 0.05 + index * 0.05 }}
+                  className="flex items-center justify-between text-3xl font-bold uppercase tracking-wide text-[#E4E4E7] hover:text-white hover:pl-2 transition-all duration-200 border-b border-white/8 pb-4"
                 >
                   <span>{link.label}</span>
-                  <ArrowUpRight size={22} className="text-[#00D2FF]" />
+                  <ArrowUpRight size={20} className="text-sky-400" />
                 </motion.a>
               ))}
             </div>
 
-            <div className="pt-8 border-t border-white/10 flex flex-col gap-2">
-              <span className="text-xs text-[#D7E2EA]/50 uppercase tracking-widest">
+            <div className="pt-8 border-t border-white/8 flex flex-col gap-2">
+              <span className="text-xs text-zinc-500 uppercase tracking-widest">
                 MAI TRUNG LUÂN — BASED IN VIETNAM
               </span>
-              <span className="text-xs font-mono text-[#D7E2EA]/70">
+              <span className="text-xs font-mono text-zinc-400">
                 contact@trungluanmmo.com
               </span>
             </div>

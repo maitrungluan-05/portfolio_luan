@@ -267,10 +267,9 @@ async function main() {
         telegram: 'https://t.me/trungluanmmo',
         facebook: 'https://facebook.com',
         instagram: 'https://instagram.com',
-        github: 'https://github.com',
         mapsEmbedUrl:
-          'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3873.354728514571!2d109.2435889758784!3d13.97824199229712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x316f159048c2ba6b%3A0x6b6070a75f1b1c34!2zQ8OhdCBUaeG6v24sIFBow7kgQ8OhdCwgQsOsbmggxJDhu4tuaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s',
-        mapsPublicUrl: 'https://maps.app.goo.gl/yP7jXW7vK8iQZ45K7',
+          'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.7637180674196!2d109.2366403!3d14.0320154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x316f4783a9870509%3A0x9cc7d822ab0ca8d2!2sTrung%20Lu%C3%A2n%20MMO!5e0!3m2!1svi!2svn!4v1700000000000!5m2!1svi!2svn',
+        mapsPublicUrl: 'https://maps.app.goo.gl/a6FLgXSrK6skTnnE9',
       }),
     },
     {
@@ -294,17 +293,129 @@ async function main() {
     },
   ];
 
-  for (const s of defaultSettings) {
-    const existing = await (prisma as any).siteSetting.findUnique({
-      where: { key: s.key },
+  // Seed Services
+  const INITIAL_SERVICES = [
+    {
+      id: 'facebook',
+      category: 'FACEBOOK SERVICES',
+      icon: 'Facebook',
+      accentColor: '#1877F2',
+      title: 'Dịch Vụ Facebook & Tool Automation',
+      tagline: 'Tăng trưởng tương tác, bảo mật tài khoản & giải pháp tự động hóa Facebook.',
+      features: JSON.stringify([
+        'Tăng Like, Follower, Bình luận, Mắt xem Livestream người dùng thật',
+        'Chăm sóc & phát triển Fanpage, Group, Profile cá nhân chuẩn tệp',
+        'Viết Tool / Bot tự động Check LIVE/DIE & Quản lý tài khoản số lượng lớn',
+        'Khắc phục sự cố, bảo mật & mở khóa tài khoản Facebook nhanh chóng',
+      ]),
+      ctaUrl: 'https://t.me/trungluanmmo',
+      ctaText: 'Tư vấn Facebook ngay',
+      highlight: true,
+      sortOrder: 1,
+    },
+    {
+      id: 'google-maps',
+      category: 'GOOGLE MAPS SEO',
+      icon: 'MapPin',
+      accentColor: '#34A853',
+      title: 'Dịch Vụ Google Maps & Local SEO',
+      tagline: 'Xác minh địa điểm, kéo khách hàng thực tế và thống trị tìm kiếm địa phương.',
+      features: JSON.stringify([
+        'Khởi tạo & Xác minh địa điểm Google Maps chuẩn xác (như TRUNG LUÂN MMO)',
+        'Tăng đánh giá (Review) 5 sao thực tế, seeding nhận xét uy tín',
+        'Tối ưu SEO Top 1 Google Search & Google Maps cho cửa hàng, doanh nghiệp',
+        'Kháng nghị, xử lý Maps bị tạm ngưng hoặc đổi thông tin nhanh chóng',
+      ]),
+      ctaUrl: 'https://t.me/trungluanmmo',
+      ctaText: 'Tư vấn Google Maps',
+      highlight: true,
+      sortOrder: 2,
+    },
+    {
+      id: 'tiktok',
+      category: 'TIKTOK SERVICES',
+      icon: 'Video',
+      accentColor: '#FE2C55',
+      title: 'Dịch Vụ TikTok & Xây Kênh',
+      tagline: 'Tăng tốc độ lan tỏa video, kéo Follower thật và xây kênh thương hiệu.',
+      features: JSON.stringify([
+        'Tăng Follower, Tim, View video TikTok đúng tệp khách hàng mục tiêu',
+        'Tăng mắt xem Livestream, đẩy đề xuất và tương tác thời gian thực',
+        'Tư vấn định hướng nội dung & chiến lược xây kênh TikTok bền vững',
+        'Tool / Script tự động hóa đăng bài, quét dữ liệu xu hướng TikTok',
+      ]),
+      ctaUrl: 'https://t.me/trungluanmmo',
+      ctaText: 'Tư vấn TikTok ngay',
+      highlight: false,
+      sortOrder: 3,
+    },
+    {
+      id: 'youtube',
+      category: 'YOUTUBE GROWTH',
+      icon: 'Youtube',
+      accentColor: '#FF0000',
+      title: 'Dịch Vụ YouTube & Bật Kiếm Tiền',
+      tagline: 'Tối ưu chuẩn SEO Video, đạt đủ điều kiện kiếm tiền và giữ chân người xem.',
+      features: JSON.stringify([
+        'Tăng Subscribe, Lượt xem (Views) & Giờ xem chất lượng cao',
+        'Hỗ trợ đạt điều kiện bật kiếm tiền YouTube an toàn 100%',
+        'Tối ưu SEO Tiêu đề, Thẻ Tag, Thumbnail đạt Top tìm kiếm YouTube',
+        'Hỗ trợ chiến lược phát triển Video dài & YouTube Shorts',
+      ]),
+      ctaUrl: 'https://t.me/trungluanmmo',
+      ctaText: 'Tư vấn YouTube',
+      highlight: false,
+      sortOrder: 4,
+    },
+    {
+      id: 'instagram',
+      category: 'INSTAGRAM BRANDING',
+      icon: 'Instagram',
+      accentColor: '#E1306C',
+      title: 'Dịch Vụ Instagram & Engagement',
+      tagline: 'Xây dựng hình ảnh trang cá nhân / shop sang trọng, thu hút tệp khách cao cấp.',
+      features: JSON.stringify([
+        'Tăng Follower, Like bài viết, Thả tim Story & Reels tương tác cao',
+        'Tối ưu giao diện Bio, Highlight & layout Instagram chuyên nghiệp',
+        'Seeding bình luận bán hàng và uy tín cho shop thương mại điện tử',
+        'Giải pháp bảo vệ bản quyền hình ảnh và an toàn tài khoản',
+      ]),
+      ctaUrl: 'https://t.me/trungluanmmo',
+      ctaText: 'Tư vấn Instagram',
+      highlight: false,
+      sortOrder: 5,
+    },
+    {
+      id: 'coding-bot',
+      category: 'DEVELOPMENT & BOTS',
+      icon: 'Code',
+      accentColor: '#00D2FF',
+      title: 'Lập Trình Web & Bot MMO Theo Yêu Cầu',
+      tagline: 'Thiết kế website bán hàng, Landing Page tốc độ cao và Bot Telegram 24/7.',
+      features: JSON.stringify([
+        'Thiết kế Landing Page / Website MMO chuẩn SEO, tải trang dưới 0.8 giây',
+        'Lập trình Telegram Bot, Discord Bot tự động nhận diện thanh toán & thông báo',
+        'Xây dựng hệ thống Backend .NET / Node.js / Python chạy liên tục 24/7',
+        'Bàn giao đầy đủ Source Code và hướng dẫn vận hành chi tiết',
+      ]),
+      ctaUrl: 'https://t.me/trungluanmmo',
+      ctaText: 'Đặt làm Web / Bot',
+      highlight: true,
+      sortOrder: 6,
+    },
+  ];
+
+  for (const srv of INITIAL_SERVICES) {
+    const existing = await (prisma as any).service.findUnique({
+      where: { id: srv.id },
     });
     if (!existing) {
-      await (prisma as any).siteSetting.create({
-        data: s,
+      await (prisma as any).service.create({
+        data: srv,
       });
     }
   }
-  console.log(`✅ Đã đồng bộ toàn bộ cài đặt thông tin cá nhân & giới thiệu vào Database`);
+  console.log(`✅ Đã đồng bộ ${INITIAL_SERVICES.length} dịch vụ MMO vào Database`);
 
   console.log('🎉 Seeding Database hoàn tất thành công!');
 }

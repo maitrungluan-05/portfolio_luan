@@ -18,9 +18,10 @@ import {
   Server,
   Database,
   Sliders,
+  Briefcase,
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
-import type { ProjectItem, MomentItem, JourneyItem, WhatIDoItem } from '../../types';
+import type { ProjectItem, MomentItem, JourneyItem, WhatIDoItem, ServiceItem } from '../../types';
 
 interface AdminPortalProps {
   isOpen: boolean;
@@ -32,6 +33,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     projects,
     moments,
     journey,
+    services,
     personalInfo,
     whatIDo,
     aboutText,
@@ -47,6 +49,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     createProject,
     updateProject,
     deleteProject,
+    createService,
+    updateService,
+    deleteService,
     createMoment,
     updateMoment,
     deleteMoment,
@@ -63,7 +68,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
   } = useData();
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<'projects' | 'moments' | 'journey' | 'messages' | 'profile' | 'info'>('projects');
+  const [activeTab, setActiveTab] = useState<'projects' | 'services' | 'moments' | 'journey' | 'messages' | 'profile' | 'info'>('projects');
   const [profileSubTab, setProfileSubTab] = useState<'personal' | 'about' | 'hometown' | 'services'>('personal');
 
   // Login Form State
@@ -75,6 +80,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
   // Modals for CRUD
   const [editingProject, setEditingProject] = useState<Partial<ProjectItem> | null>(null);
   const [isNewProject, setIsNewProject] = useState(false);
+
+  const [editingServiceItem, setEditingServiceItem] = useState<Partial<ServiceItem> | null>(null);
+  const [isNewServiceItem, setIsNewServiceItem] = useState(false);
 
   const [editingMoment, setEditingMoment] = useState<Partial<MomentItem> | null>(null);
   const [isNewMoment, setIsNewMoment] = useState(false);
@@ -254,6 +262,41 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     }
   };
 
+  // Save Service
+  const handleSaveServiceItem = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingServiceItem) return;
+
+    if (isNewServiceItem) {
+      const res = await createService(editingServiceItem);
+      if (res.success) {
+        showToast(res.message);
+        setEditingServiceItem(null);
+      } else {
+        showToast(res.message, 'error');
+      }
+    } else if (editingServiceItem.id) {
+      const res = await updateService(editingServiceItem.id, editingServiceItem);
+      if (res.success) {
+        showToast(res.message);
+        setEditingServiceItem(null);
+      } else {
+        showToast(res.message, 'error');
+      }
+    }
+  };
+
+  const handleDeleteServiceItem = async (id: string, title: string) => {
+    if (window.confirm(`Bạn có chắc chắn muốn xóa dịch vụ "${title}" không?`)) {
+      const res = await deleteService(id);
+      if (res.success) {
+        showToast(res.message);
+      } else {
+        showToast(res.message, 'error');
+      }
+    }
+  };
+
   // Save Profile (Personal Info)
   const handleSavePersonal = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -386,6 +429,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                 <p className="text-xs text-[#D7E2EA]/60 mt-1">
                   Đăng nhập để thêm, sửa, xóa dữ liệu trên hệ thống
                 </p>
+                <div className="mt-2.5 flex justify-center">
+                  <span
+                    className={`inline-flex items-center gap-1.5 text-[10px] font-mono px-3 py-1 rounded-full border ${
+                      isBackendConnected
+                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                        : 'bg-amber-500/10 text-amber-300 border-amber-500/20'
+                    }`}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${isBackendConnected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+                    {isBackendConnected
+                      ? 'Backend Express (Port 5000) Online'
+                      : 'Backend Offline (Khuyên dùng "npm run dev")'}
+                  </span>
+                </div>
               </div>
 
               {loginError && (
@@ -455,6 +512,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                 <FolderGit2 size={16} />
                 <span className="flex-1">Dự án</span>
                 <span className="px-2 py-0.5 rounded-md bg-white/15 text-[10px]">{projects.length}</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('services')}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-mono uppercase tracking-wider font-semibold transition-all w-full text-left whitespace-nowrap ${
+                  activeTab === 'services'
+                    ? 'bg-[#0066FF] text-white shadow-lg shadow-blue-900/40'
+                    : 'text-[#D7E2EA]/70 hover:bg-white/5 hover:text-white'
+                }`}
+              >
+                <Briefcase size={16} />
+                <span className="flex-1">Dịch vụ MMO</span>
+                <span className="px-2 py-0.5 rounded-md bg-white/15 text-[10px]">{services.length}</span>
               </button>
 
               <button
@@ -632,6 +702,122 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                               }}
                               className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition-colors"
                               title="Xóa dự án"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB: SERVICES */}
+              {activeTab === 'services' && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-xl font-bold text-white font-kanit uppercase">
+                        Quản Lý Dịch Vụ MMO ({services.length})
+                      </h4>
+                      <p className="text-xs text-[#D7E2EA]/60 font-mono">
+                        Dữ liệu lưu trữ trong bảng `Service` trên SQLite / Database
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsNewServiceItem(true);
+                        setEditingServiceItem({
+                          category: 'FACEBOOK SERVICES',
+                          icon: 'Facebook',
+                          accentColor: '#1877F2',
+                          title: '',
+                          tagline: '',
+                          features: [
+                            'Tăng tương tác người dùng thật',
+                            'Bảo mật & Tối ưu hiệu quả',
+                          ],
+                          ctaUrl: 'https://t.me/trungluanmmo',
+                          ctaText: 'Tư vấn ngay',
+                          highlight: false,
+                          sortOrder: services.length + 1,
+                        });
+                      }}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl accent-btn-gradient text-white text-xs font-bold uppercase tracking-wider shadow-lg"
+                    >
+                      <Plus size={16} />
+                      <span>Thêm Dịch Vụ Mới</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {services.map((item) => (
+                      <div
+                        key={item.id}
+                        className="bg-[#181818] border border-white/10 rounded-2xl p-5 flex flex-col justify-between hover:border-white/25 transition-all group"
+                      >
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span
+                              className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-md border uppercase"
+                              style={{
+                                color: item.accentColor || '#00D2FF',
+                                borderColor: `${item.accentColor || '#00D2FF'}40`,
+                                backgroundColor: `${item.accentColor || '#00D2FF'}15`,
+                              }}
+                            >
+                              {item.category}
+                            </span>
+                            {item.highlight && (
+                              <span className="text-[9px] font-mono font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 uppercase">
+                                Nổi bật
+                              </span>
+                            )}
+                          </div>
+
+                          <h5 className="font-bold text-white text-base tracking-tight uppercase">
+                            {item.title}
+                          </h5>
+
+                          <p className="text-xs text-[#D7E2EA]/70 line-clamp-2">
+                            {item.tagline}
+                          </p>
+
+                          <div className="space-y-1 pt-2 border-t border-white/8">
+                            {item.features?.slice(0, 3).map((feat, idx) => (
+                              <div key={idx} className="flex items-center gap-1.5 text-[11px] text-[#D7E2EA]/80 font-light truncate">
+                                <CheckCircle2 size={12} className="text-[#00D2FF] shrink-0" />
+                                <span className="truncate">{feat}</span>
+                              </div>
+                            ))}
+                            {item.features && item.features.length > 3 && (
+                              <span className="text-[10px] font-mono text-[#D7E2EA]/50">
+                                +{item.features.length - 3} quyền lợi khác
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-4 mt-4 border-t border-white/10">
+                          <span className="text-[11px] font-mono text-white/40">
+                            CTA: {item.ctaText}
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => {
+                                setIsNewServiceItem(false);
+                                setEditingServiceItem(item);
+                              }}
+                              className="p-2 rounded-lg bg-white/5 hover:bg-white/15 text-white transition-colors"
+                              title="Chỉnh sửa dịch vụ"
+                            >
+                              <Edit3 size={14} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteServiceItem(item.id, item.title)}
+                              className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition-colors"
+                              title="Xóa dịch vụ"
                             >
                               <Trash2 size={14} />
                             </button>
@@ -1699,6 +1885,200 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                 >
                   <Save size={14} />
                   <span>LƯU CỘT MỐC</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: EDIT / CREATE SERVICE ITEM */}
+      {editingServiceItem && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/90 backdrop-blur-2xl p-4">
+          <div className="max-w-2xl w-full bg-[#181818] border border-white/15 rounded-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto space-y-5">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <h4 className="text-lg font-bold uppercase text-white font-kanit">
+                {isNewServiceItem ? 'Thêm Dịch Vụ MMO Mới' : `Chỉnh Sửa Dịch Vụ: ${editingServiceItem.title || ''}`}
+              </h4>
+              <button onClick={() => setEditingServiceItem(null)} className="text-white/50 hover:text-white">
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveServiceItem} className="space-y-4 text-xs font-mono">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-white/70 uppercase mb-1">Tên Dịch Vụ</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingServiceItem.title || ''}
+                    onChange={(e) => setEditingServiceItem({ ...editingServiceItem, title: e.target.value })}
+                    placeholder="Dịch Vụ Facebook & Tool Automation"
+                    className="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white/70 uppercase mb-1">Danh Mục (Category)</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingServiceItem.category || ''}
+                    onChange={(e) => setEditingServiceItem({ ...editingServiceItem, category: e.target.value })}
+                    placeholder="FACEBOOK SERVICES"
+                    className="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-white/70 uppercase mb-1">Mô tả ngắn (Tagline)</label>
+                <input
+                  type="text"
+                  required
+                  value={editingServiceItem.tagline || ''}
+                  onChange={(e) => setEditingServiceItem({ ...editingServiceItem, tagline: e.target.value })}
+                  placeholder="Tăng trưởng tương tác, bảo mật tài khoản & giải pháp tự động hóa Facebook."
+                  className="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white"
+                />
+              </div>
+
+              {/* Features List */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-white/70 uppercase">
+                    Quyền Lợi & Tính Năng ({editingServiceItem.features?.length || 0})
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const current = editingServiceItem.features || [];
+                      setEditingServiceItem({ ...editingServiceItem, features: [...current, ''] });
+                    }}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[10px] uppercase font-bold"
+                  >
+                    + Thêm dòng
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  {(editingServiceItem.features || []).map((feat, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={feat}
+                        onChange={(e) => {
+                          const updated = [...(editingServiceItem.features || [])];
+                          updated[idx] = e.target.value;
+                          setEditingServiceItem({ ...editingServiceItem, features: updated });
+                        }}
+                        placeholder={`Tính năng / quyền lợi #${idx + 1}`}
+                        className="flex-1 bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = (editingServiceItem.features || []).filter((_, i) => i !== idx);
+                          setEditingServiceItem({ ...editingServiceItem, features: updated });
+                        }}
+                        className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400"
+                        title="Xóa dòng"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Colors, Icons, CTA & Highlight */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-white/70 uppercase mb-1">Màu chủ đạo (Hex)</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={editingServiceItem.accentColor || '#00D2FF'}
+                      onChange={(e) => setEditingServiceItem({ ...editingServiceItem, accentColor: e.target.value })}
+                      className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                    />
+                    <input
+                      type="text"
+                      value={editingServiceItem.accentColor || '#00D2FF'}
+                      onChange={(e) => setEditingServiceItem({ ...editingServiceItem, accentColor: e.target.value })}
+                      className="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-white/70 uppercase mb-1">Biểu tượng (Icon)</label>
+                  <select
+                    value={editingServiceItem.icon || 'Code'}
+                    onChange={(e) => setEditingServiceItem({ ...editingServiceItem, icon: e.target.value })}
+                    className="w-full bg-[#1e1e1e] border border-white/15 rounded-xl px-3 py-2 text-white"
+                  >
+                    <option value="Facebook">Facebook</option>
+                    <option value="MapPin">Google Maps</option>
+                    <option value="Video">TikTok</option>
+                    <option value="Youtube">YouTube</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Code">Code / Bot / Web</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-white/70 uppercase mb-1">Nổi bật (Highlight)</label>
+                  <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={!!editingServiceItem.highlight}
+                      onChange={(e) => setEditingServiceItem({ ...editingServiceItem, highlight: e.target.checked })}
+                      className="w-4 h-4 rounded text-[#00D2FF]"
+                    />
+                    <span className="text-white/80">Gắn nhãn Nổi bật</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-white/70 uppercase mb-1">Chữ nút CTA</label>
+                  <input
+                    type="text"
+                    value={editingServiceItem.ctaText || 'Tư vấn ngay'}
+                    onChange={(e) => setEditingServiceItem({ ...editingServiceItem, ctaText: e.target.value })}
+                    placeholder="Tư vấn Facebook ngay"
+                    className="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white/70 uppercase mb-1">Link nút CTA</label>
+                  <input
+                    type="text"
+                    value={editingServiceItem.ctaUrl || 'https://t.me/trungluanmmo'}
+                    onChange={(e) => setEditingServiceItem({ ...editingServiceItem, ctaUrl: e.target.value })}
+                    placeholder="https://t.me/trungluanmmo"
+                    className="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setEditingServiceItem(null)}
+                  className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white"
+                >
+                  Hủy
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl accent-btn-gradient text-white font-bold"
+                >
+                  <Save size={14} />
+                  <span>LƯU DỊCH VỤ</span>
                 </button>
               </div>
             </form>

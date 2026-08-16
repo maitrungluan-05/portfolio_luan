@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
-import type { ProjectItem, MomentItem, JourneyItem, WhatIDoItem, StoryCardItem } from '../types';
+import type { ProjectItem, MomentItem, JourneyItem, WhatIDoItem, StoryCardItem, ServiceItem } from '../types';
 import {
   PROJECTS as DEFAULT_PROJECTS,
   MOMENTS as DEFAULT_MOMENTS,
@@ -11,6 +11,7 @@ import {
   HOMETOWN_STORY as DEFAULT_HOMETOWN,
   STORY_MARQUEE_ROW_1 as DEFAULT_MARQUEE_1,
   STORY_MARQUEE_ROW_2 as DEFAULT_MARQUEE_2,
+  SERVICES_DATA as DEFAULT_SERVICES,
 } from '../data/portfolioData';
 import { api, setAuthToken, getAuthToken, type ContactMessage, type AuthUser } from '../services/api';
 
@@ -21,6 +22,7 @@ interface DataContextType {
   projects: ProjectItem[];
   moments: MomentItem[];
   journey: JourneyItem[];
+  services: ServiceItem[];
   personalInfo: PersonalInfoType;
   whatIDo: WhatIDoItem[];
   aboutText: string;
@@ -42,6 +44,11 @@ interface DataContextType {
   createProject: (project: Partial<ProjectItem>) => Promise<{ success: boolean; message: string }>;
   updateProject: (id: string, project: Partial<ProjectItem>) => Promise<{ success: boolean; message: string }>;
   deleteProject: (id: string) => Promise<{ success: boolean; message: string }>;
+
+  // Services CRUD
+  createService: (service: Partial<ServiceItem>) => Promise<{ success: boolean; message: string }>;
+  updateService: (id: string, service: Partial<ServiceItem>) => Promise<{ success: boolean; message: string }>;
+  deleteService: (id: string) => Promise<{ success: boolean; message: string }>;
 
   // Moments CRUD
   createMoment: (moment: Partial<MomentItem>) => Promise<{ success: boolean; message: string }>;
@@ -75,6 +82,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [projects, setProjects] = useState<ProjectItem[]>(DEFAULT_PROJECTS);
   const [moments, setMoments] = useState<MomentItem[]>(DEFAULT_MOMENTS);
   const [journey, setJourney] = useState<JourneyItem[]>(DEFAULT_JOURNEY);
+  const [services, setServices] = useState<ServiceItem[]>(DEFAULT_SERVICES);
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoType>(DEFAULT_PERSONAL_INFO);
   const [whatIDo, setWhatIDo] = useState<WhatIDoItem[]>(DEFAULT_WHAT_I_DO);
   const [aboutText, setAboutText] = useState<string>(DEFAULT_ABOUT_TEXT);
@@ -91,11 +99,12 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Fetch all live data from backend with fallback
   const refreshData = useCallback(async () => {
     try {
-      const [pRes, mRes, jRes, sRes] = await Promise.allSettled([
+      const [pRes, mRes, jRes, sRes, srvRes] = await Promise.allSettled([
         api.getProjects(),
         api.getMoments(),
         api.getJourney(),
         api.getSettings(),
+        api.getServices(),
       ]);
 
       let backendOk = false;
@@ -110,6 +119,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       if (jRes.status === 'fulfilled' && jRes.value?.success && jRes.value.data?.length > 0) {
         setJourney(jRes.value.data);
+        backendOk = true;
+      }
+      if (srvRes.status === 'fulfilled' && srvRes.value?.success && srvRes.value.data?.length > 0) {
+        setServices(srvRes.value.data);
         backendOk = true;
       }
       if (sRes.status === 'fulfilled' && sRes.value?.success && sRes.value.data) {
@@ -191,6 +204,16 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Đăng nhập thất bại' };
     } catch (err: any) {
+      // Offline preview fallback if backend is offline
+      if (!isBackendConnected && username.trim() === 'admin' && (password === 'adminpassword123' || password === 'admin')) {
+        const offlineUser: AuthUser = { id: 'offline-admin', username: 'admin (Offline)' };
+        setAuthToken('offline-admin-token');
+        setAuthUser(offlineUser);
+        return {
+          success: true,
+          message: 'Đăng nhập chế độ Offline thành công! Hãy chạy "npm run dev" để lưu dữ liệu vào SQLite Database.',
+        };
+      }
       return { success: false, message: err.message || 'Lỗi kết nối tới Backend' };
     }
   };
@@ -212,6 +235,18 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi tạo dự án' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        const newProj = {
+          ...project,
+          id: `local-proj-${Date.now()}`,
+          number: project.number || `0${projects.length + 1}`,
+          technologies: project.technologies || [],
+          images: project.images || [],
+          metrics: project.metrics || [],
+        } as ProjectItem;
+        setProjects((prev) => [newProj, ...prev]);
+        return { success: true, message: 'Đã thêm dự án (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -225,6 +260,12 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi cập nhật dự án' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        setProjects((prev) =>
+          prev.map((p) => (p.id === id ? ({ ...p, ...project } as ProjectItem) : p))
+        );
+        return { success: true, message: 'Đã cập nhật dự án (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -238,6 +279,78 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi xóa dự án' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        setProjects((prev) => prev.filter((p) => p.id !== id));
+        return { success: true, message: 'Đã xóa dự án (Lưu tạm Offline)' };
+      }
+      return { success: false, message: err.message };
+    }
+  };
+
+  // Services CRUD
+  const createService = async (service: Partial<ServiceItem>) => {
+    try {
+      const res = await api.createService(service);
+      if (res.success) {
+        await refreshData();
+        return { success: true, message: 'Thêm dịch vụ thành công' };
+      }
+      return { success: false, message: res.message || 'Lỗi thêm dịch vụ' };
+    } catch (err: any) {
+      if (!isBackendConnected) {
+        const newSrv = {
+          ...service,
+          id: `local-srv-${Date.now()}`,
+          category: service.category || 'FACEBOOK SERVICES',
+          icon: service.icon || 'Code',
+          accentColor: service.accentColor || '#00D2FF',
+          title: service.title || 'Dịch vụ mới',
+          tagline: service.tagline || '',
+          features: service.features || [],
+          ctaUrl: service.ctaUrl || 'https://t.me/trungluanmmo',
+          ctaText: service.ctaText || 'Tư vấn ngay',
+          highlight: service.highlight || false,
+          sortOrder: services.length + 1,
+        } as ServiceItem;
+        setServices((prev) => [...prev, newSrv]);
+        return { success: true, message: 'Đã thêm dịch vụ (Lưu tạm Offline)' };
+      }
+      return { success: false, message: err.message };
+    }
+  };
+
+  const updateService = async (id: string, service: Partial<ServiceItem>) => {
+    try {
+      const res = await api.updateService(id, service);
+      if (res.success) {
+        await refreshData();
+        return { success: true, message: 'Cập nhật dịch vụ thành công' };
+      }
+      return { success: false, message: res.message || 'Lỗi cập nhật dịch vụ' };
+    } catch (err: any) {
+      if (!isBackendConnected) {
+        setServices((prev) =>
+          prev.map((s) => (s.id === id ? ({ ...s, ...service } as ServiceItem) : s))
+        );
+        return { success: true, message: 'Đã cập nhật dịch vụ (Lưu tạm Offline)' };
+      }
+      return { success: false, message: err.message };
+    }
+  };
+
+  const deleteService = async (id: string) => {
+    try {
+      const res = await api.deleteService(id);
+      if (res.success) {
+        await refreshData();
+        return { success: true, message: 'Đã xóa dịch vụ' };
+      }
+      return { success: false, message: res.message || 'Lỗi xóa dịch vụ' };
+    } catch (err: any) {
+      if (!isBackendConnected) {
+        setServices((prev) => prev.filter((s) => s.id !== id));
+        return { success: true, message: 'Đã xóa dịch vụ (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -252,6 +365,15 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi thêm khoảnh khắc' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        const newMoment = {
+          ...moment,
+          id: `local-moment-${Date.now()}`,
+          aspectRatio: moment.aspectRatio || 'landscape',
+        } as MomentItem;
+        setMoments((prev) => [newMoment, ...prev]);
+        return { success: true, message: 'Đã thêm khoảnh khắc (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -265,6 +387,12 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi cập nhật' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        setMoments((prev) =>
+          prev.map((m) => (m.id === id ? ({ ...m, ...moment } as MomentItem) : m))
+        );
+        return { success: true, message: 'Đã cập nhật khoảnh khắc (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -278,6 +406,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi xóa' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        setMoments((prev) => prev.filter((m) => m.id !== id));
+        return { success: true, message: 'Đã xóa khoảnh khắc (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -292,6 +424,16 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi thêm' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        const newStep = {
+          ...step,
+          id: `local-journey-${Date.now()}`,
+          number: step.number || `0${journey.length + 1}`,
+          tags: step.tags || [],
+        } as JourneyItem;
+        setJourney((prev) => [newStep, ...prev]);
+        return { success: true, message: 'Đã thêm cột mốc (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -305,6 +447,12 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi cập nhật' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        setJourney((prev) =>
+          prev.map((j) => (j.id === id ? ({ ...j, ...step } as JourneyItem) : j))
+        );
+        return { success: true, message: 'Đã cập nhật cột mốc (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -318,6 +466,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi xóa' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        setJourney((prev) => prev.filter((j) => j.id !== id));
+        return { success: true, message: 'Đã xóa cột mốc (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -333,6 +485,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi cập nhật' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        setPersonalInfo((prev) => ({ ...prev, ...data }));
+        return { success: true, message: 'Đã cập nhật thông tin cá nhân (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -348,6 +504,11 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi cập nhật' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        setAboutText(data.text);
+        if (data.fragments) setAboutFragments(data.fragments);
+        return { success: true, message: 'Đã cập nhật phần giới thiệu (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -362,6 +523,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi cập nhật' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        setHometownStory((prev) => ({ ...prev, ...data }));
+        return { success: true, message: 'Đã cập nhật thông tin quê hương (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -375,6 +540,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi cập nhật' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        setWhatIDo(items);
+        return { success: true, message: 'Đã cập nhật danh sách dịch vụ (Lưu tạm Offline)' };
+      }
       return { success: false, message: err.message };
     }
   };
@@ -389,6 +558,18 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
       return { success: false, message: res.message || 'Lỗi khi gửi tin nhắn' };
     } catch (err: any) {
+      if (!isBackendConnected) {
+        const dummyMsg: ContactMessage = {
+          id: `local-msg-${Date.now()}`,
+          name: data.name,
+          contactInfo: data.email,
+          message: data.message,
+          isRead: false,
+          createdAt: new Date().toISOString(),
+        };
+        setMessages((prev) => [dummyMsg, ...prev]);
+        return { success: true, message: 'Tin nhắn đã được gửi (Lưu tạm bộ nhớ cục bộ)' };
+      }
       return { success: false, message: err.message || 'Không thể kết nối máy chủ' };
     }
   };
@@ -402,7 +583,13 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         );
       }
     } catch (err) {
-      console.error(err);
+      if (!isBackendConnected) {
+        setMessages((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, isRead: !m.isRead } : m))
+        );
+      } else {
+        console.error(err);
+      }
     }
   };
 
@@ -413,7 +600,11 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setMessages((prev) => prev.filter((m) => m.id !== id));
       }
     } catch (err) {
-      console.error(err);
+      if (!isBackendConnected) {
+        setMessages((prev) => prev.filter((m) => m.id !== id));
+      } else {
+        console.error(err);
+      }
     }
   };
 
@@ -421,6 +612,22 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       return await api.uploadImage(file);
     } catch (err: any) {
+      if (!isBackendConnected) {
+        return new Promise<{ success: boolean; url: string; message?: string }>((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            resolve({
+              success: true,
+              url: reader.result as string,
+              message: 'Tải ảnh preview cục bộ thành công',
+            });
+          };
+          reader.onerror = () => {
+            resolve({ success: false, url: '', message: 'Lỗi đọc file ảnh' });
+          };
+          reader.readAsDataURL(file);
+        });
+      }
       return { success: false, url: '', message: err.message || 'Lỗi upload ảnh' };
     }
   };
@@ -433,6 +640,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         projects,
         moments,
         journey,
+        services,
         personalInfo,
         whatIDo,
         aboutText,
@@ -452,6 +660,9 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         createProject,
         updateProject,
         deleteProject,
+        createService,
+        updateService,
+        deleteService,
         createMoment,
         updateMoment,
         deleteMoment,

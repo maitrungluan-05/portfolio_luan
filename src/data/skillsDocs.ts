@@ -1,0 +1,291 @@
+export interface SkillDocItem {
+  name: string;
+  category: string;
+  tagline: string;
+  description: string;
+  officialDocUrl: string;
+  learningSources: {
+    title: string;
+    url: string;
+    type: 'Official Docs' | 'Interactive Tutorial' | 'Roadmap' | 'Video/Course' | 'Community';
+  }[];
+  keyTopics: string[];
+  appliedExperience: string;
+}
+
+export const SKILLS_DOCS: Record<string, SkillDocItem> = {
+  'React & Next.js': {
+    name: 'React & Next.js',
+    category: 'Frontend Framework',
+    tagline: 'Hệ sinh thái xây dựng giao diện tương tác và ứng dụng web full-stack hiệu năng cao.',
+    description: 'React là thư viện JavaScript hàng đầu để xây dựng UI dựa trên component. Next.js là React framework hỗ trợ Server Components (RSC), SSR, SSG, tối ưu hóa SEO và Server Actions.',
+    officialDocUrl: 'https://nextjs.org/docs',
+    learningSources: [
+      { title: 'Tài liệu chính thức React.dev', url: 'https://react.dev/learn', type: 'Official Docs' },
+      { title: 'Tài liệu chính thức Next.js (App Router)', url: 'https://nextjs.org/docs', type: 'Official Docs' },
+      { title: 'Lộ trình học React Roadmap', url: 'https://roadmap.sh/react', type: 'Roadmap' },
+      { title: 'Next.js Learn Interactive Course', url: 'https://nextjs.org/learn', type: 'Interactive Tutorial' },
+    ],
+    keyTopics: ['Server Components & Client Components', 'Hooks (useState, useEffect, useMemo)', 'Routing & Nested Layouts', 'Server Actions & Data Fetching', 'Rendering Strategies (SSR, SSG, ISR)'],
+    appliedExperience: 'Ứng dụng xây dựng cấu trúc website portfolio, các nền tảng thương mại và bảng điều khiển quản trị.',
+  },
+  'TypeScript': {
+    name: 'TypeScript',
+    category: 'Programming Language',
+    tagline: 'JavaScript với hệ thống kiểu tĩnh (Static Typing) an toàn và chuẩn xác.',
+    description: 'TypeScript là ngôn ngữ mở rộng của JavaScript, bổ sung kiểu dữ liệu tĩnh giúp phát hiện lỗi ngay khi viết code, tăng tốc độ phát triển và tái cấu trúc hệ thống an toàn.',
+    officialDocUrl: 'https://www.typescriptlang.org/docs/',
+    learningSources: [
+      { title: 'Tài liệu TypeScript Handbook', url: 'https://www.typescriptlang.org/docs/handbook/intro.html', type: 'Official Docs' },
+      { title: 'TypeScript Playground (Thực hành trực tuyến)', url: 'https://www.typescriptlang.org/play', type: 'Interactive Tutorial' },
+      { title: 'Lộ trình TypeScript Roadmap', url: 'https://roadmap.sh/typescript', type: 'Roadmap' },
+      { title: 'Total TypeScript Tips & Tutorials', url: 'https://www.totaltypescript.com/tutorials', type: 'Community' },
+    ],
+    keyTopics: ['Generics & Utility Types', 'Type Narrowing & Discriminated Unions', 'Interface vs Type Aliases', 'Strict Type Checking & Null Safety'],
+    appliedExperience: 'Sử dụng 100% cho cả frontend (React) và backend (Node.js/Express) để đảm bảo tính an toàn dữ liệu.',
+  },
+  'Tailwind CSS': {
+    name: 'Tailwind CSS',
+    category: 'CSS Framework',
+    tagline: 'Utility-first CSS framework giúp thiết kế giao diện nhanh chóng, linh hoạt.',
+    description: 'Tailwind CSS cung cấp các class tiện ích cấp thấp để xây dựng giao diện tùy biến hoàn toàn trực tiếp trong HTML/JSX mà không cần rời khỏi file code.',
+    officialDocUrl: 'https://tailwindcss.com/docs',
+    learningSources: [
+      { title: 'Tài liệu chính thức Tailwind CSS', url: 'https://tailwindcss.com/docs', type: 'Official Docs' },
+      { title: 'Tailwind Play (Trình soạn thảo trực tiếp)', url: 'https://play.tailwindcss.com/', type: 'Interactive Tutorial' },
+      { title: 'Refactoring UI (Tư duy thiết kế UI)', url: 'https://www.refactoringui.com/', type: 'Community' },
+    ],
+    keyTopics: ['Utility-first Workflow', 'Responsive Breakpoints (sm, md, lg, xl)', 'Custom Themes & Design Tokens', 'Arbitrary Values & JIT Engine'],
+    appliedExperience: 'Định hình toàn bộ Design System, bảng màu, typography và responsive layout cho website.',
+  },
+  'Performance Optimization': {
+    name: 'Performance Optimization',
+    category: 'Web Engineering',
+    tagline: 'Tối ưu tốc độ tải trang, Core Web Vitals và độ mượt mà khi người dùng tương tác.',
+    description: 'Bao gồm các kỹ thuật nén asset, lazy loading, code splitting, tối ưu bundle size, tối ưu font, giảm thiểu Layout Shifts (CLS) và tối ưu thời gian phản hồi (LCP, FID/INP).',
+    officialDocUrl: 'https://web.dev/explore/fast',
+    learningSources: [
+      { title: 'Google Web Vitals Documentation', url: 'https://web.dev/vitals/', type: 'Official Docs' },
+      { title: 'MDN Web Performance Guide', url: 'https://developer.mozilla.org/en-US/docs/Web/Performance', type: 'Official Docs' },
+      { title: 'PageSpeed Insights Tool', url: 'https://pagespeed.web.dev/', type: 'Interactive Tutorial' },
+    ],
+    keyTopics: ['Core Web Vitals (LCP, INP, CLS)', 'Code Splitting & Dynamic Imports', 'Image & Asset Optimization (WebP/AVIF)', 'Browser Caching & CDN Distribution'],
+    appliedExperience: 'Giúp website đạt 60 FPS mượt mà và thời gian tải dưới 0.8 giây.',
+  },
+  'Responsive Architecture': {
+    name: 'Responsive Architecture',
+    category: 'UI/UX Engineering',
+    tagline: 'Kiến trúc giao diện co giãn hoàn hảo trên mọi kích thước màn hình từ di động đến màn hình 4K.',
+    description: 'Tổ chức hệ thống layout dạng fluid grid, flexbox và CSS subgrid kết hợp fluid typography (`clamp()`) giúp hiển thị sắc nét, không bị vỡ giao diện trên bất kỳ thiết bị nào.',
+    officialDocUrl: 'https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design',
+    learningSources: [
+      { title: 'MDN Responsive Design Principles', url: 'https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design', type: 'Official Docs' },
+      { title: 'A Complete Guide to Flexbox & Grid', url: 'https://css-tricks.com/snippets/css/a-guide-to-flexbox/', type: 'Community' },
+    ],
+    keyTopics: ['Fluid Typography with clamp()', 'Mobile-first Design Thinking', 'CSS Grid & Flexbox Masteries', 'Touch Interactions on Mobile'],
+    appliedExperience: 'Đảm bảo trải nghiệm trực quan từ màn hình iPhone nhỏ gọn đến màn hình Ultra-Wide.',
+  },
+  'Telegram / Discord Bots': {
+    name: 'Telegram / Discord Bots',
+    category: 'Bot Development',
+    tagline: 'Tự động hóa thông báo, quản lý cộng đồng và tương tác thời gian thực.',
+    description: 'Xây dựng bot tương tác 24/7 kết nối với Telegram Bot API và Discord Developer Portal, hỗ trợ gửi tin nhắn tự động, inline keyboard, webhook lắng nghe sự kiện.',
+    officialDocUrl: 'https://core.telegram.org/bots/api',
+    learningSources: [
+      { title: 'Telegram Bot API Documentation', url: 'https://core.telegram.org/bots/api', type: 'Official Docs' },
+      { title: 'Discord Developer Documentation', url: 'https://discord.com/developers/docs/intro', type: 'Official Docs' },
+      { title: 'Telegraf.js Library (Node.js for Telegram)', url: 'https://telegraf.js.org/', type: 'Official Docs' },
+    ],
+    keyTopics: ['Webhook vs Long Polling', 'Interactive Keyboards & Commands', 'Rate Limiting & Queue Processing', 'Secure API Token Storage'],
+    appliedExperience: 'Phát triển các hệ thống bot cảnh báo giao dịch, gửi tin nhắn tự động và giám sát dữ liệu.',
+  },
+  'Workflow Automation': {
+    name: 'Workflow Automation',
+    category: 'System Automation',
+    tagline: 'Kết nối và tự động hóa các quy trình công việc giữa nhiều dịch vụ trực tuyến.',
+    description: 'Sử dụng kịch bản lập trình hoặc công cụ workflow (n8n, custom cron script) để liên kết API, đồng bộ dữ liệu tự động giữa Google Sheets, cơ sở dữ liệu và kênh thông báo.',
+    officialDocUrl: 'https://n8n.io/docs/',
+    learningSources: [
+      { title: 'Tài liệu chính thức n8n.io', url: 'https://docs.n8n.io/', type: 'Official Docs' },
+      { title: 'Zapier Automation Guides', url: 'https://zapier.com/learn/', type: 'Community' },
+    ],
+    keyTopics: ['Event-driven Architecture', 'Data Transformation & ETL', 'Error Handling & Auto-retry Logic', 'Secure Credential Management'],
+    appliedExperience: 'Tối ưu hóa các tác vụ lặp đi lặp lại, tiết kiệm hàng giờ thao tác thủ công mỗi ngày.',
+  },
+  'Node.js & Python': {
+    name: 'Node.js & Python',
+    category: 'Backend & Scripting',
+    tagline: 'Bộ đôi công nghệ mạnh mẽ cho xử lý máy chủ, API và kịch bản tự động hóa.',
+    description: 'Node.js mang lại khả năng xử lý bất đồng bộ I/O non-blocking tốc độ cao cho API web. Python xuất sắc trong việc phân tích dữ liệu, crawl web và viết tool tự động.',
+    officialDocUrl: 'https://nodejs.org/en/docs/',
+    learningSources: [
+      { title: 'Node.js Official Documentation', url: 'https://nodejs.org/en/docs/', type: 'Official Docs' },
+      { title: 'Python 3 Official Documentation', url: 'https://docs.python.org/3/', type: 'Official Docs' },
+      { title: 'Lộ trình Backend Developer Roadmap', url: 'https://roadmap.sh/backend', type: 'Roadmap' },
+      { title: 'FastAPI Framework Documentation', url: 'https://fastapi.tiangolo.com/', type: 'Official Docs' },
+    ],
+    keyTopics: ['Event Loop & Async/Await', 'RESTful API Construction with Express / FastAPI', 'File I/O & Streams', 'Web Scraping with Playwright & BeautifulSoup'],
+    appliedExperience: 'Xây dựng máy chủ Express.js, middleware xác thực JWT và các script tự động hóa backend.',
+  },
+  'Webhook Systems': {
+    name: 'Webhook Systems',
+    category: 'Backend Architecture',
+    tagline: 'Cơ chế thông báo thời gian thực hướng sự kiện (Event-driven) giữa các hệ thống.',
+    description: 'Webhook cho phép hệ thống này tự động bắn dữ liệu sang hệ thống khác ngay khi có sự kiện phát sinh (thanh toán thành công, có tin nhắn mới, cập nhật trạng thái).',
+    officialDocUrl: 'https://hookdeck.com/webhooks/guides/what-are-webhooks',
+    learningSources: [
+      { title: 'Webhook Comprehensive Guide (Hookdeck)', url: 'https://hookdeck.com/webhooks/guides/what-are-webhooks', type: 'Official Docs' },
+      { title: 'Stripe Webhook Best Practices', url: 'https://docs.stripe.com/webhooks', type: 'Official Docs' },
+    ],
+    keyTopics: ['Signature Verification & Security (HMAC)', 'Idempotency & Handling Duplicate Events', 'Retry Mechanisms & Exponential Backoff', 'Payload Parsing & Routing'],
+    appliedExperience: 'Tích hợp nhận thông báo tức thời từ các cổng dịch vụ và bot mạng xã hội.',
+  },
+  'Task Scheduling': {
+    name: 'Task Scheduling',
+    category: 'DevOps & Backend',
+    tagline: 'Lập lịch chạy tác vụ định kỳ chính xác theo thời gian thực.',
+    description: 'Quản lý lịch trình tự động thực thi các tác vụ bảo trì, sao lưu cơ sở dữ liệu, gửi email định kỳ và dọn dẹp bộ nhớ đệm sử dụng Cron expressions và BullMQ.',
+    officialDocUrl: 'https://crontab.guru/',
+    learningSources: [
+      { title: 'Crontab Guru (Trình tạo và kiểm tra Cron expression)', url: 'https://crontab.guru/', type: 'Interactive Tutorial' },
+      { title: 'Node-Cron Library Documentation', url: 'https://github.com/node-cron/node-cron', type: 'Official Docs' },
+    ],
+    keyTopics: ['Cron Expression Syntax (* * * * *)', 'Timezone Alignment', 'Process Management & PM2', 'Queue Management with Redis/BullMQ'],
+    appliedExperience: 'Tự động sao lưu dữ liệu và quét dọn tác vụ định kỳ mỗi ngày.',
+  },
+  'Product Ideation': {
+    name: 'Product Ideation',
+    category: 'Product Strategy',
+    tagline: 'Phương pháp chuyển đổi ý tưởng thành giải pháp sản phẩm số khả thi.',
+    description: 'Quy trình nghiên cứu nhu cầu người dùng, xác định giá trị cốt lõi (Value Proposition), xây dựng bản nháp MVP và lộ trình phát triển sản phẩm.',
+    officialDocUrl: 'https://www.ycombinator.com/library',
+    learningSources: [
+      { title: 'Y Combinator Startup Library', url: 'https://www.ycombinator.com/library', type: 'Official Docs' },
+      { title: 'Product Management Roadmap', url: 'https://roadmap.sh/product-manager', type: 'Roadmap' },
+    ],
+    keyTopics: ['MVP (Minimum Viable Product) Definition', 'User Journey Mapping', 'Feature Prioritization (MoSCoW)', 'Iterative Feedback Loops'],
+    appliedExperience: 'Thiết kế các giải pháp số và dự án web thương mại phục vụ nhu cầu người dùng thực tế.',
+  },
+  'UX/UI Logic': {
+    name: 'UX/UI Logic',
+    category: 'Design Engineering',
+    tagline: 'Tư duy bố cục logic, tâm lý học người dùng và tính khả dụng của giao diện.',
+    description: 'Thiết kế giao diện dựa trên các nguyên tắc tâm lý học thị giác (Laws of UX), hệ số tương phản chuẩn, tính trực quan khi điều hướng và giảm tải nhận thức cho người dùng.',
+    officialDocUrl: 'https://lawsofux.com/',
+    learningSources: [
+      { title: 'Laws of UX (Các quy luật tâm lý học thiết kế)', url: 'https://lawsofux.com/', type: 'Official Docs' },
+      { title: 'Refactoring UI Design Principles', url: 'https://www.refactoringui.com/', type: 'Community' },
+      { title: 'Nielsen Norman Group UX Research', url: 'https://www.nngroup.com/articles/', type: 'Official Docs' },
+    ],
+    keyTopics: ['Visual Hierarchy & Spacing', 'Fitts Law & Hick Law in UI', 'Color Contrast & Accessibility (a11y)', 'Consistent Navigation Systems'],
+    appliedExperience: 'Xây dựng trải nghiệm trực quan, dễ thao tác và thoải mái cho người xem.',
+  },
+  'Database Modeling': {
+    name: 'Database Modeling',
+    category: 'Data Engineering',
+    tagline: 'Thiết kế cấu trúc cơ sở dữ liệu quan hệ và phi quan hệ chuẩn xác, tối ưu.',
+    description: 'Mô hình hóa thực thể quan hệ (ERD), chuẩn hóa dữ liệu (Normal Forms), đánh chỉ mục (Index) và thao tác an toàn với ORM như Prisma / PostgreSQL / SQLite.',
+    officialDocUrl: 'https://www.prisma.io/docs',
+    learningSources: [
+      { title: 'Prisma ORM Official Documentation', url: 'https://www.prisma.io/docs', type: 'Official Docs' },
+      { title: 'PostgreSQL Official Documentation', url: 'https://www.postgresql.org/docs/', type: 'Official Docs' },
+      { title: 'PostgreSQL Tutorial', url: 'https://www.postgresqltutorial.com/', type: 'Interactive Tutorial' },
+    ],
+    keyTopics: ['Schema Design & Migrations', 'Relationships (1-1, 1-N, N-N)', 'Indexing & Query Performance', 'Transactions & Data Integrity'],
+    appliedExperience: 'Thiết kế Prisma Schema và SQLite/PostgreSQL quản lý danh mục Portfolio, Moments và Messages.',
+  },
+  'API Integration': {
+    name: 'API Integration',
+    category: 'Backend Integration',
+    tagline: 'Kết nối và tiêu thụ các dịch vụ API bên ngoài an toàn, ổn định.',
+    description: 'Xây dựng và tích hợp RESTful API, Google Maps Embed API, Cloudinary/S3 Media Upload, dịch vụ thanh toán và quản lý xác thực bằng Token.',
+    officialDocUrl: 'https://restfulapi.net/',
+    learningSources: [
+      { title: 'RESTful API Design Best Practices', url: 'https://restfulapi.net/', type: 'Official Docs' },
+      { title: 'MDN Fetch API Guide', url: 'https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API', type: 'Official Docs' },
+      { title: 'Postman API Learning Center', url: 'https://learning.postman.com/', type: 'Community' },
+    ],
+    keyTopics: ['HTTP Methods & Status Codes', 'Authentication (Bearer Tokens, API Keys)', 'Error Handling & Response Standardization', 'CORS & Security Headers'],
+    appliedExperience: 'Tích hợp Google Maps, Cloudinary và hệ thống quản trị dữ liệu thời gian thực.',
+  },
+  'Deployment & Scaling': {
+    name: 'Deployment & Scaling',
+    category: 'DevOps & Cloud',
+    tagline: 'Đưa ứng dụng lên môi trường production toàn cầu với độ sẵn sàng cao.',
+    description: 'Quy trình CI/CD tự động, cấu hình máy chủ Linux VPS, Docker Container, quản lý tiến trình bằng PM2, reverse proxy Nginx và phân phối qua Cloudflare CDN.',
+    officialDocUrl: 'https://vercel.com/docs',
+    learningSources: [
+      { title: 'Vercel Deployment Documentation', url: 'https://vercel.com/docs', type: 'Official Docs' },
+      { title: 'Cloudflare Developer Docs', url: 'https://developers.cloudflare.com/', type: 'Official Docs' },
+      { title: 'Docker Official Documentation', url: 'https://docs.docker.com/', type: 'Official Docs' },
+      { title: 'Lộ trình DevOps Roadmap', url: 'https://roadmap.sh/devops', type: 'Roadmap' },
+    ],
+    keyTopics: ['SSL/TLS Encryption & Custom Domains', 'CI/CD Pipelines with GitHub Actions', 'Reverse Proxy with Nginx', 'Edge Caching & DDoS Protection'],
+    appliedExperience: 'Triển khai các ứng dụng web với chứng chỉ SSL, CDN Cloudflare và bảo mật cao.',
+  },
+  'Framer Motion': {
+    name: 'Framer Motion',
+    category: 'Animation Library',
+    tagline: 'Thư viện chuyển động vật lý cao cấp hàng đầu cho hệ sinh thái React.',
+    description: 'Hỗ trợ declarative animations, gesture controls (hover, drag, tap), spring physics, layout animations, scroll-driven parallax và chuyển cảnh trang liền mạch.',
+    officialDocUrl: 'https://motion.dev/docs',
+    learningSources: [
+      { title: 'Tài liệu chính thức Motion.dev (Framer Motion)', url: 'https://motion.dev/docs', type: 'Official Docs' },
+      { title: 'Framer Motion Examples & Playground', url: 'https://motion.dev/examples', type: 'Interactive Tutorial' },
+    ],
+    keyTopics: ['Spring Physics (stiffness, damping)', 'useScroll & useTransform Parallax', 'AnimatePresence for Exit Animations', 'Layout Animations (layoutId)'],
+    appliedExperience: 'Tạo toàn bộ hiệu ứng cuộn trang, sticky card stacking và chuyển cảnh mượt mà 60 FPS.',
+  },
+  'Micro-interactions': {
+    name: 'Micro-interactions',
+    category: 'Interaction Design',
+    tagline: 'Những hiệu ứng chuyển động vi mô tinh tế mang lại cảm giác sống động.',
+    description: 'Các phản hồi nhỏ khi người dùng di chuột qua nút bấm, kéo rê card, nhấp chuột hoặc chuyển trạng thái, tạo nên cảm giác phần mềm phản hồi tức thì và cao cấp.',
+    officialDocUrl: 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations',
+    learningSources: [
+      { title: 'MDN CSS Animations & Transitions', url: 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations', type: 'Official Docs' },
+      { title: 'Codrops UI Interactions & Effects', url: 'https://tympanus.net/codrops/', type: 'Community' },
+    ],
+    keyTopics: ['Magnetic Cursor Attraction', 'Hover Elevation & Border Glow', 'Smooth Damping Easings', 'Feedback States (Success, Loading, Hover)'],
+    appliedExperience: 'Tích hợp nút hút nam châm (Magnet Button), vệt sáng quét qua chữ và hiệu ứng hover card.',
+  },
+  'Custom Typography': {
+    name: 'Custom Typography',
+    category: 'Typography & Layout',
+    tagline: 'Nghệ thuật sắp chữ và tạo điểm nhấn thị giác qua kiểu chữ hiện đại.',
+    description: 'Sử dụng font chữ Kanit, Inter với độ đậm nhạt tương phản cao, khoảng cách ký tự (tracking/kerning) chuẩn xác và tỷ lệ cấp độ tiêu đề hài hòa theo tỷ lệ vàng.',
+    officialDocUrl: 'https://fonts.google.com/knowledge',
+    learningSources: [
+      { title: 'Google Fonts Knowledge (Tài liệu chuẩn về Typography)', url: 'https://fonts.google.com/knowledge', type: 'Official Docs' },
+      { title: 'Type Scale Visual Calculator', url: 'https://typescale.com/', type: 'Interactive Tutorial' },
+    ],
+    keyTopics: ['Type Scales & Hierarchy', 'Letter Spacing (Tracking) & Line Height (Leading)', 'Variable Fonts & Performance', 'Display Headlines vs Body Copy'],
+    appliedExperience: 'Định hình phong cách tạp chí công nghệ cao cấp cho toàn bộ portfolio.',
+  },
+  'Glassmorphism & Depth': {
+    name: 'Glassmorphism & Depth',
+    category: 'Visual Aesthetics',
+    tagline: 'Hiệu ứng kính mờ phủ tuyết và phân lớp không gian 3 chiều.',
+    description: 'Kết hợp thuộc tính `backdrop-filter: blur()`, độ trong suốt bán mờ, viền 1px tinh xảo và ánh sáng phản chiếu để tạo cảm giác các phần tử lơ lửng trong không gian.',
+    officialDocUrl: 'https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter',
+    learningSources: [
+      { title: 'MDN backdrop-filter Documentation', url: 'https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter', type: 'Official Docs' },
+      { title: 'CSS Glassmorphism Generator', url: 'https://hype4.academy/tools/glassmorphism-generator', type: 'Interactive Tutorial' },
+    ],
+    keyTopics: ['Backdrop Blur & Translucency', 'Fine 1px Frosted Borders', 'Multi-layer Depth & Elevation', 'Ambient Lighting Blending Modes'],
+    appliedExperience: 'Tạo thanh Navbar mờ, các card dự án và modal hiển thị trong suốt.',
+  },
+  'Visual Storytelling': {
+    name: 'Visual Storytelling',
+    category: 'Creative Direction',
+    tagline: 'Kể câu chuyện thương hiệu và hành trình cá nhân qua hình ảnh trực quan.',
+    description: 'Dẫn dắt người xem qua từng cung bậc cảm xúc bằng cách kết hợp nhịp điệu cuộn trang (Scrollytelling), hình ảnh điện ảnh quê hương Cát Tiến và các cột mốc sự nghiệp.',
+    officialDocUrl: 'https://www.awwwards.com/',
+    learningSources: [
+      { title: 'Awwwards Creative Storytelling Websites', url: 'https://www.awwwards.com/websites/storytelling/', type: 'Community' },
+      { title: 'FWA (Favorite Website Awards)', url: 'https://thefwa.com/', type: 'Community' },
+    ],
+    keyTopics: ['Scrollytelling Choreography', 'Pacing & Visual Rhythm', 'Emotional Connection with Hometown & Roots', 'Editorial Photo Gallery Curation'],
+    appliedExperience: 'Tạo nên section Quê hương Cát Tiến, bộ sưu tập Moments và dòng thời gian phát triển.',
+  },
+};

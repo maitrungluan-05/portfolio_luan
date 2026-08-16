@@ -71,18 +71,26 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-center gap-3">
-            <span className="text-xs tracking-[0.2em] font-mono uppercase bg-white/10 text-[#D7E2EA] px-3 py-1 rounded-full border border-white/10">
+            <button
+              onClick={onClose}
+              className="px-4 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-white text-xs font-medium uppercase tracking-wider flex items-center gap-1.5 transition-colors focus:outline-none backdrop-blur-md"
+            >
+              <X size={14} />
+              <span>Quay lại</span>
+            </button>
+
+            <span className="text-xs tracking-[0.2em] font-mono uppercase bg-white/10 text-white px-3 py-1 rounded-full border border-white/10">
               {currentIndex + 1} / {moments.length}
             </span>
-            <span className="hidden sm:inline-flex items-center gap-1.5 text-xs text-[#D7E2EA]/60 bg-white/5 px-3 py-1 rounded-full">
-              <Tag size={12} className="text-[#00D2FF]" />
+            <span className="hidden sm:inline-flex items-center gap-1.5 text-xs text-sky-200 bg-white/5 px-3 py-1 rounded-full border border-white/10">
+              <Tag size={12} className="text-[#00B2FE]" />
               {currentItem.category}
             </span>
           </div>
 
           <button
             onClick={onClose}
-            className="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors duration-200 focus:outline-none"
+            className="w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-colors duration-200 focus:outline-none backdrop-blur-md"
             aria-label="Đóng xem ảnh"
           >
             <X size={20} />
