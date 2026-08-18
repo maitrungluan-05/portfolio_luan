@@ -5,7 +5,7 @@ import {
   updateService,
   deleteService,
 } from '../controllers/servicesController';
-import { authenticateToken } from '../middleware/authMiddleware';
+import { requireAuth } from '../middleware/auth';
 
 const router = Router();
 
@@ -13,8 +13,8 @@ const router = Router();
 router.get('/', getServices);
 
 // Protected routes (Admin only)
-router.post('/', authenticateToken, createService);
-router.put('/:id', authenticateToken, updateService);
-router.delete('/:id', authenticateToken, deleteService);
+router.post('/', requireAuth, createService);
+router.put('/:id', requireAuth, updateService);
+router.delete('/:id', requireAuth, deleteService);
 
 export default router;

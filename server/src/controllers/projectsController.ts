@@ -36,7 +36,7 @@ export const getAllProjects = async (_req: Request, res: Response): Promise<void
 export const getProjectById = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const project = await prisma.project.findUnique({ where: { id } });
+    const project = await prisma.project.findUnique({ where: { id: id as string } });
     if (!project) {
       res.status(404).json({ success: false, message: 'Không tìm thấy dự án' });
       return;
@@ -113,14 +113,14 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
       sortOrder,
     } = req.body;
 
-    const existing = await prisma.project.findUnique({ where: { id } });
+    const existing = await prisma.project.findUnique({ where: { id: id as string } });
     if (!existing) {
       res.status(404).json({ success: false, message: 'Không tìm thấy dự án để cập nhật' });
       return;
     }
 
     const updated = await prisma.project.update({
-      where: { id },
+      where: { id: id as string },
       data: {
         number: number !== undefined ? number : existing.number,
         name: name !== undefined ? name : existing.name,
@@ -147,13 +147,13 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
 export const deleteProject = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const existing = await prisma.project.findUnique({ where: { id } });
+    const existing = await prisma.project.findUnique({ where: { id: id as string } });
     if (!existing) {
       res.status(404).json({ success: false, message: 'Không tìm thấy dự án để xóa' });
       return;
     }
 
-    await prisma.project.delete({ where: { id } });
+    await prisma.project.delete({ where: { id: id as string } });
     res.json({ success: true, message: 'Đã xóa dự án thành công' });
   } catch (error: any) {
     console.error('Error deleting project:', error);

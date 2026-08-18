@@ -56,7 +56,7 @@ async function handleResponse<T = any>(res: Response): Promise<T> {
   const text = await res.text();
   if (!res.ok) {
     if (res.status === 502 || res.status === 504 || res.status === 500 || !text) {
-      throw new Error('Máy chủ Backend (Port 5000) chưa được khởi chạy hoặc không phản hồi. Hãy chạy lệnh "npm run dev" trong terminal.');
+      throw new Error('Máy chủ Backend chưa được khởi chạy hoặc không phản hồi. Hãy chạy lệnh "npm run dev" trong terminal.');
     }
     throw new Error(`Máy chủ trả về lỗi ${res.status}: ${text || res.statusText}`);
   }
@@ -78,7 +78,7 @@ const safeFetch = async <T = any>(url: string, options?: RequestInit): Promise<T
     return await handleResponse<T>(res);
   } catch (err: any) {
     if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('fetch failed'))) {
-      throw new Error('Không thể kết nối đến Backend Server (Port 5000). Vui lòng chạy "npm run dev" để khởi động đầy đủ hệ thống.');
+      throw new Error('Không thể kết nối đến Backend Server. Vui lòng chạy "npm run dev" để khởi động đầy đủ hệ thống.');
     }
     throw err;
   }

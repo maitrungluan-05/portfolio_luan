@@ -62,14 +62,14 @@ export const updateJourneyStep = async (req: Request, res: Response): Promise<vo
     const { id } = req.params;
     const { number, stage, period, title, description, tags, sortOrder } = req.body;
 
-    const existing = await prisma.journeyStep.findUnique({ where: { id } });
+    const existing = await prisma.journeyStep.findUnique({ where: { id: id as string } });
     if (!existing) {
       res.status(404).json({ success: false, message: 'Không tìm thấy cột mốc' });
       return;
     }
 
     const updated = await prisma.journeyStep.update({
-      where: { id },
+      where: { id: id as string },
       data: {
         number: number !== undefined ? number : existing.number,
         stage: stage !== undefined ? stage : existing.stage,
@@ -91,7 +91,7 @@ export const updateJourneyStep = async (req: Request, res: Response): Promise<vo
 export const deleteJourneyStep = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    await prisma.journeyStep.delete({ where: { id } });
+    await prisma.journeyStep.delete({ where: { id: id as string } });
     res.json({ success: true, message: 'Đã xóa cột mốc' });
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });

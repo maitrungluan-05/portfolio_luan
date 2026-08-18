@@ -73,14 +73,14 @@ export const getAllMessages = async (_req: Request, res: Response): Promise<void
 export const toggleMessageRead = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const existing = await prisma.contactMessage.findUnique({ where: { id } });
+    const existing = await prisma.contactMessage.findUnique({ where: { id: id as string } });
     if (!existing) {
       res.status(404).json({ success: false, message: 'Không tìm thấy tin nhắn' });
       return;
     }
 
     const updated = await prisma.contactMessage.update({
-      where: { id },
+      where: { id: id as string },
       data: { isRead: !existing.isRead },
     });
 
@@ -94,7 +94,7 @@ export const toggleMessageRead = async (req: Request, res: Response): Promise<vo
 export const deleteMessage = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    await prisma.contactMessage.delete({ where: { id } });
+    await prisma.contactMessage.delete({ where: { id: id as string } });
     res.json({ success: true, message: 'Đã xóa tin nhắn' });
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Lỗi server', error: error.message });

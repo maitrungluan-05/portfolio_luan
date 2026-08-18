@@ -51,14 +51,14 @@ export const updateMoment = async (req: Request, res: Response): Promise<void> =
     const { id } = req.params;
     const { title, category, location, aspectRatio, image, caption, sortOrder } = req.body;
 
-    const existing = await prisma.moment.findUnique({ where: { id } });
+    const existing = await prisma.moment.findUnique({ where: { id: id as string } });
     if (!existing) {
       res.status(404).json({ success: false, message: 'Không tìm thấy moment để cập nhật' });
       return;
     }
 
     const updated = await prisma.moment.update({
-      where: { id },
+      where: { id: id as string },
       data: {
         title: title !== undefined ? title : existing.title,
         category: category !== undefined ? category.toUpperCase() : existing.category,
@@ -81,13 +81,13 @@ export const updateMoment = async (req: Request, res: Response): Promise<void> =
 export const deleteMoment = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const existing = await prisma.moment.findUnique({ where: { id } });
+    const existing = await prisma.moment.findUnique({ where: { id: id as string } });
     if (!existing) {
       res.status(404).json({ success: false, message: 'Không tìm thấy moment để xóa' });
       return;
     }
 
-    await prisma.moment.delete({ where: { id } });
+    await prisma.moment.delete({ where: { id: id as string } });
     res.json({ success: true, message: 'Đã xóa moment thành công' });
   } catch (error: any) {
     console.error('Error deleting moment:', error);
